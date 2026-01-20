@@ -258,11 +258,16 @@ export default function Home() {
 
                                     {/* Animated corner accents */}
                                     <div className="absolute top-0 right-0 w-20 h-20 border-b border-l border-blue-500/30 rounded-bl-3xl" />
-                                    <div className="absolute bottom-0 left-0 w-16 h-16 border-t border-r border-amber-500/30 rounded-tr-3xl" />
-                                </div>
+                                                                    </div>
 
-                                {/* Floating accent block */}
-                                <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl animate-float shadow-lg shadow-blue-500/25" />
+                                {/* Floating logo block */}
+                                <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-zinc-900 rounded-2xl animate-float shadow-lg shadow-blue-500/25 flex items-center justify-center overflow-hidden border border-zinc-800">
+                                    <img
+                                        src="/dimariodev2.png"
+                                        alt="DiMario Dev Logo"
+                                        className="w-16 h-16 object-contain"
+                                    />
+                                </div>
 
                                 {/* Small floating dot */}
                                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-amber-500 rounded-full animate-pulse-glow shadow-lg shadow-amber-500/50" />

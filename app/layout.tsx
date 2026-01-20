@@ -7,6 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "DiMario Development | Web & App Development",
     description: "Crafting high-performance websites, web applications, and digital experiences.",
+    icons: {
+        icon: "/dimariodev2.png",
+        apple: "/dimariodev2.png",
+    },
 };
 
 export default function RootLayout({
