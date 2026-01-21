@@ -14,10 +14,16 @@ export default function Home() {
         projectType: "",
         message: "",
     });
-    const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [formStatus, setFormStatus] = useState<
+        "idle" | "loading" | "success" | "error"
+    >("idle");
     const [formError, setFormError] = useState("");
 
-    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleFormChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >,
+    ) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
@@ -46,7 +52,9 @@ export default function Home() {
             setFormData({ name: "", email: "", projectType: "", message: "" });
         } catch (error) {
             setFormStatus("error");
-            setFormError(error instanceof Error ? error.message : "Something went wrong");
+            setFormError(
+                error instanceof Error ? error.message : "Something went wrong",
+            );
         }
     };
 
@@ -216,9 +224,10 @@ export default function Home() {
                             </h1>
 
                             <p className="text-zinc-400 text-lg max-w-md leading-relaxed">
-                                Skip the corporate runaround. We're a private studio that delivers
-                                high-quality websites and apps — fast, affordable, and with a real
-                                person you can actually reach.
+                                Skip the corporate runaround. We're a private
+                                studio that delivers high-quality websites and
+                                apps — fast, affordable, and with a real person
+                                you can actually reach.
                             </p>
 
                             {/* Value props */}
@@ -301,7 +310,7 @@ export default function Home() {
 
                                     {/* Animated corner accents */}
                                     <div className="absolute top-0 right-0 w-20 h-20 border-b border-l border-blue-500/30 rounded-bl-3xl" />
-                                                                    </div>
+                                </div>
 
                                 {/* Floating logo block */}
                                 <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-zinc-900 rounded-2xl animate-float shadow-lg shadow-blue-500/25 flex items-center justify-center overflow-hidden border border-zinc-800">
@@ -347,8 +356,9 @@ export default function Home() {
                             Services
                         </h2>
                         <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
-                            Quality work without the agency markup. We keep overhead low
-                            so you get professional results at rates that make sense.
+                            Quality work without the agency markup. We keep
+                            overhead low so you get professional results at
+                            rates that make sense.
                         </p>
                     </div>
 
@@ -460,7 +470,8 @@ export default function Home() {
                             Selected Work
                         </h2>
                         <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
-                            Real projects for real clients — delivered on time and on budget.
+                            Real projects for real clients — delivered on time
+                            and on budget.
                         </p>
                     </div>
 
@@ -476,24 +487,47 @@ export default function Home() {
                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
                                 <div className="text-center relative z-10">
                                     <div className="w-14 h-14 mx-auto bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
-                                        <svg className="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 21a9 9 0 01-9-9c0-2.52 1.02-4.8 2.67-6.45L12 0l6.33 5.55A9 9 0 0121 12a9 9 0 01-9 9zm0-3a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
+                                        <svg
+                                            className="w-7 h-7 text-blue-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={1.5}
+                                                d="M12 21a9 9 0 01-9-9c0-2.52 1.02-4.8 2.67-6.45L12 0l6.33 5.55A9 9 0 0121 12a9 9 0 01-9 9zm0-3a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                                            />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
                             <div className="p-5">
-                                <span className="text-xs text-blue-400 uppercase tracking-wider">Web Development</span>
+                                <span className="text-xs text-blue-400 uppercase tracking-wider">
+                                    Web Development
+                                </span>
                                 <h3 className="text-lg font-semibold mt-1 group-hover:text-blue-400 transition-colors">
                                     Pocopson Veterinary Station
                                 </h3>
                                 <p className="text-zinc-400 text-sm mt-2">
-                                    Modern, responsive website for a local veterinary practice.
+                                    Modern, responsive website for a local
+                                    veterinary practice.
                                 </p>
                                 <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-blue-400 transition-colors">
                                     <span>View Live Site</span>
-                                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    <svg
+                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
                                     </svg>
                                 </div>
                             </div>
@@ -510,24 +544,47 @@ export default function Home() {
                                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
                                 <div className="text-center relative z-10">
                                     <div className="w-14 h-14 mx-auto bg-purple-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
-                                        <svg className="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        <svg
+                                            className="w-7 h-7 text-purple-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={1.5}
+                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                                            />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
                             <div className="p-5">
-                                <span className="text-xs text-purple-400 uppercase tracking-wider">Web Development</span>
+                                <span className="text-xs text-purple-400 uppercase tracking-wider">
+                                    Web Development
+                                </span>
                                 <h3 className="text-lg font-semibold mt-1 group-hover:text-purple-400 transition-colors">
                                     BMG
                                 </h3>
                                 <p className="text-zinc-400 text-sm mt-2">
-                                    Professional business website with modern design.
+                                    Professional business website with modern
+                                    design.
                                 </p>
                                 <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-purple-400 transition-colors">
                                     <span>View Live Site</span>
-                                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    <svg
+                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
                                     </svg>
                                 </div>
                             </div>
@@ -543,19 +600,32 @@ export default function Home() {
                             <div className="aspect-video bg-gradient-to-br from-amber-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
                                 <div className="text-center relative z-10">
                                     <div className="w-14 h-14 mx-auto bg-amber-500/20 border border-amber-500/30 rounded-2xl flex items-center justify-center mb-2">
-                                        <svg className="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        <svg
+                                            className="w-7 h-7 text-amber-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={1.5}
+                                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                            />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
                             <div className="p-5">
-                                <span className="text-xs text-amber-400 uppercase tracking-wider">App Development</span>
+                                <span className="text-xs text-amber-400 uppercase tracking-wider">
+                                    App Development
+                                </span>
                                 <h3 className="text-lg font-semibold mt-1 text-zinc-300">
                                     iOS App Landing Page
                                 </h3>
                                 <p className="text-zinc-500 text-sm mt-2">
-                                    Marketing website for upcoming iOS application.
+                                    Marketing website for upcoming iOS
+                                    application.
                                 </p>
                                 <div className="flex items-center gap-2 mt-4 text-sm text-zinc-600">
                                     <span>In Development</span>
@@ -615,8 +685,10 @@ export default function Home() {
                                 </span>
                             </h2>
                             <p className="text-zinc-400 mt-6 max-w-sm">
-                                No contact forms that go nowhere. No waiting weeks for a response.
-                                Just reach out and talk directly with the person who'll build your project.
+                                No contact forms that go nowhere. No waiting
+                                weeks for a response. Just reach out and talk
+                                directly with the person who'll build your
+                                project.
                             </p>
 
                             <a
@@ -693,12 +765,27 @@ export default function Home() {
                             {formStatus === "success" ? (
                                 <div className="text-center py-12">
                                     <div className="w-16 h-16 mx-auto bg-green-500/20 border border-green-500/30 rounded-full flex items-center justify-center mb-4">
-                                        <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        <svg
+                                            className="w-8 h-8 text-green-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M5 13l4 4L19 7"
+                                            />
                                         </svg>
                                     </div>
-                                    <h3 className="text-xl font-semibold text-white mb-2">Message Sent!</h3>
-                                    <p className="text-zinc-400 mb-6">Thanks for reaching out. I'll get back to you soon.</p>
+                                    <h3 className="text-xl font-semibold text-white mb-2">
+                                        Message Sent!
+                                    </h3>
+                                    <p className="text-zinc-400 mb-6">
+                                        Thanks for reaching out. We'll get back
+                                        to you soon.
+                                    </p>
                                     <button
                                         onClick={() => setFormStatus("idle")}
                                         className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
@@ -707,7 +794,10 @@ export default function Home() {
                                     </button>
                                 </div>
                             ) : (
-                                <form onSubmit={handleSubmit} className="space-y-5">
+                                <form
+                                    onSubmit={handleSubmit}
+                                    className="space-y-5"
+                                >
                                     <div className="grid sm:grid-cols-2 gap-5">
                                         <div>
                                             <label className="block text-sm text-zinc-400 mb-2">
@@ -786,7 +876,9 @@ export default function Home() {
                                         disabled={formStatus === "loading"}
                                         className="w-full bg-white text-black font-medium py-3.5 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        {formStatus === "loading" ? "Sending..." : "Send Message"}
+                                        {formStatus === "loading"
+                                            ? "Sending..."
+                                            : "Send Message"}
                                     </button>
                                 </form>
                             )}
