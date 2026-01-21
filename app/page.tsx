@@ -7,6 +7,49 @@ export default function Home() {
     const [loaded, setLoaded] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
+    // Contact form state
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        projectType: "",
+        message: "",
+    });
+    const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [formError, setFormError] = useState("");
+
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setFormStatus("loading");
+        setFormError("");
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to send message");
+            }
+
+            setFormStatus("success");
+            setFormData({ name: "", email: "", projectType: "", message: "" });
+        } catch (error) {
+            setFormStatus("error");
+            setFormError(error instanceof Error ? error.message : "Something went wrong");
+        }
+    };
+
     useEffect(() => {
         setLoaded(true);
         const handleMouse = (e: MouseEvent) => {
@@ -647,65 +690,106 @@ export default function Home() {
 
                         {/* Right - Form */}
                         <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 sm:p-8 hover:border-zinc-700 transition-colors duration-300">
-                            <form className="space-y-5">
-                                <div className="grid sm:grid-cols-2 gap-5">
-                                    <div>
-                                        <label className="block text-sm text-zinc-400 mb-2">
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300"
-                                            placeholder="Your name"
-                                        />
+                            {formStatus === "success" ? (
+                                <div className="text-center py-12">
+                                    <div className="w-16 h-16 mx-auto bg-green-500/20 border border-green-500/30 rounded-full flex items-center justify-center mb-4">
+                                        <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-xl font-semibold text-white mb-2">Message Sent!</h3>
+                                    <p className="text-zinc-400 mb-6">Thanks for reaching out. I'll get back to you soon.</p>
+                                    <button
+                                        onClick={() => setFormStatus("idle")}
+                                        className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                                    >
+                                        Send another message
+                                    </button>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit} className="space-y-5">
+                                    <div className="grid sm:grid-cols-2 gap-5">
+                                        <div>
+                                            <label className="block text-sm text-zinc-400 mb-2">
+                                                Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleFormChange}
+                                                required
+                                                className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+                                                placeholder="Your name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm text-zinc-400 mb-2">
+                                                Email
+                                            </label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleFormChange}
+                                                required
+                                                className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+                                                placeholder="your@email.com"
+                                            />
+                                        </div>
                                     </div>
                                     <div>
                                         <label className="block text-sm text-zinc-400 mb-2">
-                                            Email
+                                            Project Type
                                         </label>
-                                        <input
-                                            type="email"
-                                            className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300"
-                                            placeholder="your@email.com"
+                                        <select
+                                            name="projectType"
+                                            value={formData.projectType}
+                                            onChange={handleFormChange}
+                                            className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors duration-300"
+                                        >
+                                            <option value="">
+                                                Select a service
+                                            </option>
+                                            <option value="web">
+                                                Web Development
+                                            </option>
+                                            <option value="app">
+                                                App Development
+                                            </option>
+                                            <option value="consultation">
+                                                Web Consultation
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-zinc-400 mb-2">
+                                            Message
+                                        </label>
+                                        <textarea
+                                            name="message"
+                                            value={formData.message}
+                                            onChange={handleFormChange}
+                                            required
+                                            rows={4}
+                                            className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300 resize-none"
+                                            placeholder="Tell us about your project..."
                                         />
                                     </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-zinc-400 mb-2">
-                                        Project Type
-                                    </label>
-                                    <select className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors duration-300">
-                                        <option value="">
-                                            Select a service
-                                        </option>
-                                        <option value="web">
-                                            Web Development
-                                        </option>
-                                        <option value="app">
-                                            App Development
-                                        </option>
-                                        <option value="consultation">
-                                            Web Consultation
-                                        </option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-zinc-400 mb-2">
-                                        Message
-                                    </label>
-                                    <textarea
-                                        rows={4}
-                                        className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300 resize-none"
-                                        placeholder="Tell us about your project..."
-                                    />
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="w-full bg-white text-black font-medium py-3.5 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25"
-                                >
-                                    Send Message
-                                </button>
-                            </form>
+                                    {formStatus === "error" && (
+                                        <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">
+                                            {formError}
+                                        </div>
+                                    )}
+                                    <button
+                                        type="submit"
+                                        disabled={formStatus === "loading"}
+                                        className="w-full bg-white text-black font-medium py-3.5 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {formStatus === "loading" ? "Sending..." : "Send Message"}
+                                    </button>
+                                </form>
+                            )}
                         </div>
                     </div>
                 </div>
