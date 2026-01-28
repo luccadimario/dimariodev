@@ -193,10 +193,7 @@ export default function Home() {
                     style={{ animationDelay: "1s" }}
                 />
                 <div className="absolute top-[60%] right-[10%] w-3 h-3 bg-amber-500 rounded-full animate-pulse-glow" />
-                <div
-                    className="absolute top-[40%] left-[25%] w-2 h-2 bg-blue-400 rounded-full animate-pulse-glow"
-                    style={{ animationDelay: "1.5s" }}
-                />
+
                 <div
                     className="absolute bottom-[35%] left-[10%] w-2 h-2 bg-purple-400 rounded-full animate-pulse-glow"
                     style={{ animationDelay: "3s" }}
@@ -590,18 +587,19 @@ export default function Home() {
                             </div>
                         </a>
 
-                        {/* Project 3 - iOS App Website (Coming Soon) */}
-                        <div className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden relative">
-                            <div className="absolute top-4 right-4 z-10">
-                                <span className="text-xs font-medium bg-amber-500/20 text-amber-400 px-3 py-1 rounded-full border border-amber-500/30">
-                                    Coming Soon
-                                </span>
-                            </div>
-                            <div className="aspect-video bg-gradient-to-br from-amber-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
+                        {/* Project 3 - PFactor */}
+                        <a
+                            href="https://pfactor.app"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-sky-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-sky-500/10"
+                        >
+                            <div className="aspect-video bg-gradient-to-br from-sky-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/0 to-blue-500/0 group-hover:from-sky-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
                                 <div className="text-center relative z-10">
-                                    <div className="w-14 h-14 mx-auto bg-amber-500/20 border border-amber-500/30 rounded-2xl flex items-center justify-center mb-2">
+                                    <div className="w-14 h-14 mx-auto bg-sky-500/20 border border-sky-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
                                         <svg
-                                            className="w-7 h-7 text-amber-400"
+                                            className="w-7 h-7 text-sky-400"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -610,28 +608,41 @@ export default function Home() {
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
                                                 strokeWidth={1.5}
-                                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                                             />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
                             <div className="p-5">
-                                <span className="text-xs text-amber-400 uppercase tracking-wider">
+                                <span className="text-xs text-sky-400 uppercase tracking-wider">
                                     App Development
                                 </span>
-                                <h3 className="text-lg font-semibold mt-1 text-zinc-300">
-                                    iOS App Landing Page
+                                <h3 className="text-lg font-semibold mt-1 group-hover:text-sky-400 transition-colors">
+                                    PFactor
                                 </h3>
-                                <p className="text-zinc-500 text-sm mt-2">
-                                    Marketing website for upcoming iOS
-                                    application.
+                                <p className="text-zinc-400 text-sm mt-2">
+                                    AI-powered private pilot oral exam practice
+                                    app for iOS.
                                 </p>
-                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-600">
-                                    <span>In Development</span>
+                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-sky-400 transition-colors">
+                                    <span>View Live Site</span>
+                                    <svg
+                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <div className="text-center mt-14">
