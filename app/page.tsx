@@ -1,6 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const FloatingShapes3D = dynamic(
+    () => import("@/components/FloatingShapes3D"),
+    { ssr: false }
+);
 
 export default function Home() {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -185,19 +191,8 @@ export default function Home() {
                     style={{ animationDelay: "2s" }}
                 />
 
-                {/* Floating geometric shapes */}
-                <div className="absolute top-1/4 right-[20%] w-20 h-20 border border-zinc-800/50 rotate-45 animate-float opacity-30" />
-                <div className="absolute top-1/3 left-[15%] w-12 h-12 border border-blue-500/20 rounded-full animate-float-delayed" />
-                <div
-                    className="absolute bottom-1/4 right-[30%] w-16 h-16 border border-purple-500/20 rotate-12 animate-float"
-                    style={{ animationDelay: "1s" }}
-                />
-                <div className="absolute top-[60%] right-[10%] w-3 h-3 bg-amber-500 rounded-full animate-pulse-glow" />
-
-                <div
-                    className="absolute bottom-[35%] left-[10%] w-2 h-2 bg-purple-400 rounded-full animate-pulse-glow"
-                    style={{ animationDelay: "3s" }}
-                />
+                {/* 3D Floating geometric shapes */}
+                <FloatingShapes3D mousePos={mousePos} />
 
                 <div className="max-w-5xl mx-auto px-6 pt-24 pb-16 w-full relative z-10">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -317,9 +312,6 @@ export default function Home() {
                                         className="w-16 h-16 object-contain"
                                     />
                                 </div>
-
-                                {/* Small floating dot */}
-                                <div className="absolute -top-2 -right-2 w-4 h-4 bg-amber-500 rounded-full animate-pulse-glow shadow-lg shadow-amber-500/50" />
                             </div>
                         </div>
                     </div>
