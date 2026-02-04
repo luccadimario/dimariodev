@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 const FloatingShapes3D = dynamic(
     () => import("@/components/FloatingShapes3D"),
-    { ssr: false }
+    { ssr: false },
 );
 
 export default function Home() {
@@ -465,63 +465,6 @@ export default function Home() {
                     </div>
 
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Project 1 - Pocopson Vet Station */}
-                        <a
-                            href="https://pocopsonvetstation.dimario.dev"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10"
-                        >
-                            <div className="aspect-video bg-gradient-to-br from-blue-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
-                                <div className="text-center relative z-10">
-                                    <div className="w-14 h-14 mx-auto bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
-                                        <svg
-                                            className="w-7 h-7 text-blue-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={1.5}
-                                                d="M12 21a9 9 0 01-9-9c0-2.52 1.02-4.8 2.67-6.45L12 0l6.33 5.55A9 9 0 0121 12a9 9 0 01-9 9zm0-3a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-5">
-                                <span className="text-xs text-blue-400 uppercase tracking-wider">
-                                    Web Development
-                                </span>
-                                <h3 className="text-lg font-semibold mt-1 group-hover:text-blue-400 transition-colors">
-                                    Pocopson Veterinary Station
-                                </h3>
-                                <p className="text-zinc-400 text-sm mt-2">
-                                    Modern, responsive website for a local
-                                    veterinary practice.
-                                </p>
-                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-blue-400 transition-colors">
-                                    <span>View Live Site</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-
                         {/* Project 2 - BMG */}
                         <a
                             href="https://bmg.dimario.dev"
@@ -554,10 +497,10 @@ export default function Home() {
                                     Web Development
                                 </span>
                                 <h3 className="text-lg font-semibold mt-1 group-hover:text-purple-400 transition-colors">
-                                    BMG
+                                    BMG Aviation
                                 </h3>
                                 <p className="text-zinc-400 text-sm mt-2">
-                                    Professional business website with modern
+                                    Professional FBO website with a modern
                                     design.
                                 </p>
                                 <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-purple-400 transition-colors">
@@ -618,6 +561,62 @@ export default function Home() {
                                     app for iOS.
                                 </p>
                                 <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-sky-400 transition-colors">
+                                    <span>View Live Site</span>
+                                    <svg
+                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </a>
+                        {/* Project 1 - Pocopson Vet Station */}
+                        <a
+                            href="https://pocopsonvetstation.dimario.dev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10"
+                        >
+                            <div className="aspect-video bg-gradient-to-br from-blue-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
+                                <div className="text-center relative z-10">
+                                    <div className="w-14 h-14 mx-auto bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
+                                        <svg
+                                            className="w-7 h-7 text-blue-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={1.5}
+                                                d="M12 21a9 9 0 01-9-9c0-2.52 1.02-4.8 2.67-6.45L12 0l6.33 5.55A9 9 0 0121 12a9 9 0 01-9 9zm0-3a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-xs text-blue-400 uppercase tracking-wider">
+                                    Web Development
+                                </span>
+                                <h3 className="text-lg font-semibold mt-1 group-hover:text-blue-400 transition-colors">
+                                    Pocopson Veterinary Station
+                                </h3>
+                                <p className="text-zinc-400 text-sm mt-2">
+                                    Modern, responsive website for a local
+                                    veterinary practice.
+                                </p>
+                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-blue-400 transition-colors">
                                     <span>View Live Site</span>
                                     <svg
                                         className="w-4 h-4 group-hover:translate-x-1 transition-transform"
