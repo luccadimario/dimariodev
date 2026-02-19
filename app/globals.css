@@ -201,6 +201,16 @@ body {
     background-clip: text;
 }
 
+/* Waveform animation for PFactor voice visualization */
+@keyframes waveform {
+    0% {
+        transform: scaleY(0.5);
+    }
+    100% {
+        transform: scaleY(1.2);
+    }
+}
+
 /* Noise texture overlay */
 .noise-overlay {
     position: fixed;

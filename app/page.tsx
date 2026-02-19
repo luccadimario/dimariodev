@@ -445,65 +445,284 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ===== WORK ===== */}
+            {/* ===== PERSONAL PROJECTS ===== */}
             <section id="work" className="py-28 relative">
                 {/* Background accent */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-glow" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-glow" />
+                <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "3s" }} />
 
                 <div className="max-w-5xl mx-auto px-6 relative z-10">
                     <div className="text-center mb-16">
                         <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
-                            Portfolio
+                            Built from Scratch
                         </span>
                         <h2 className="text-4xl sm:text-5xl font-bold mt-4">
-                            Selected Work
+                            Personal Projects
                         </h2>
                         <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
-                            Real projects for real clients — delivered on time
-                            and on budget.
+                            Passion-driven projects built from the ground up — exploring new technologies and pushing boundaries.
                         </p>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Project 2 - BMG */}
+                    {/* Dilithium - Featured Project */}
+                    <a
+                        href="https://dilithiumcoin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-cyan-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10"
+                    >
+                        <div className="grid md:grid-cols-2 gap-0">
+                            {/* Left - Visual */}
+                            <div className="relative bg-gradient-to-br from-cyan-950/50 via-zinc-900 to-purple-950/30 flex items-center justify-center p-10 min-h-[280px] overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
+                                {/* Crystal from dilithiumcoin.com hero */}
+                                <div className="relative z-10 flex flex-col items-center">
+                                    <div className="w-36 h-52 relative group-hover:scale-110 transition-all duration-500 animate-float">
+                                        <svg width="200" height="280" viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full animate-pulse-glow">
+                                            <defs>
+                                                <linearGradient id="crystalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stopColor="#67e8f9" stopOpacity="1" />
+                                                    <stop offset="50%" stopColor="#22d3ee" stopOpacity="0.95" />
+                                                    <stop offset="100%" stopColor="#06b6d4" stopOpacity="1" />
+                                                </linearGradient>
+                                                <linearGradient id="crystalGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" stopColor="#0891b2" stopOpacity="1" />
+                                                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.9" />
+                                                </linearGradient>
+                                                <linearGradient id="crystalGrad3" x1="50%" y1="0%" x2="50%" y2="100%">
+                                                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0.5" />
+                                                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="1" />
+                                                </linearGradient>
+                                                <filter id="crystalGlow">
+                                                    <feGaussianBlur stdDeviation="12" result="blur" />
+                                                    <feMerge>
+                                                        <feMergeNode in="blur" />
+                                                        <feMergeNode in="blur" />
+                                                        <feMergeNode in="SourceGraphic" />
+                                                    </feMerge>
+                                                </filter>
+                                                <filter id="innerGlow">
+                                                    <feGaussianBlur stdDeviation="6" result="blur" />
+                                                    <feMerge>
+                                                        <feMergeNode in="blur" />
+                                                        <feMergeNode in="SourceGraphic" />
+                                                    </feMerge>
+                                                </filter>
+                                            </defs>
+                                            {/* Outer glow */}
+                                            <ellipse cx="100" cy="140" rx="70" ry="90" fill="#22d3ee" opacity="0.2" filter="url(#crystalGlow)" />
+                                            {/* Main crystal body — top half */}
+                                            <polygon points="100,10 60,100 100,130 140,100" fill="url(#crystalGrad1)" stroke="#67e8f9" strokeWidth="1" strokeOpacity="0.8" />
+                                            {/* Main crystal body — bottom half */}
+                                            <polygon points="60,100 100,130 140,100 100,270" fill="url(#crystalGrad2)" stroke="#67e8f9" strokeWidth="1" strokeOpacity="0.8" />
+                                            {/* Left facet */}
+                                            <polygon points="100,10 60,100 100,130" fill="url(#crystalGrad3)" opacity="0.6" />
+                                            {/* Right facet highlight */}
+                                            <polygon points="100,10 140,100 100,130" fill="#67e8f9" opacity="0.3" />
+                                            {/* Center line */}
+                                            <line x1="100" y1="10" x2="100" y2="270" stroke="#67e8f9" strokeWidth="0.8" opacity="0.5" />
+                                            {/* Internal refraction lines */}
+                                            <line x1="75" y1="60" x2="125" y2="120" stroke="#22d3ee" strokeWidth="0.5" opacity="0.6" />
+                                            <line x1="125" y1="60" x2="75" y2="120" stroke="#22d3ee" strokeWidth="0.5" opacity="0.5" />
+                                            <line x1="80" y1="140" x2="120" y2="200" stroke="#22d3ee" strokeWidth="0.5" opacity="0.5" />
+                                            {/* Sparkle highlights */}
+                                            <circle cx="90" cy="50" r="3" fill="white" opacity="1" filter="url(#innerGlow)" />
+                                            <circle cx="110" cy="80" r="2.5" fill="white" opacity="0.9" filter="url(#innerGlow)" />
+                                            <circle cx="95" cy="110" r="2" fill="white" opacity="0.7" filter="url(#innerGlow)" />
+                                            <circle cx="105" cy="180" r="1.5" fill="#67e8f9" opacity="0.6" filter="url(#innerGlow)" />
+                                        </svg>
+                                    </div>
+                                    <span className="mt-2 text-xs font-mono text-cyan-400/60 uppercase tracking-[0.3em]">DLT</span>
+                                </div>
+                            </div>
+
+                            {/* Right - Info */}
+                            <div className="p-8 flex flex-col justify-center">
+                                <div className="flex items-center gap-3 mb-3">
+                                    <span className="text-xs text-cyan-400 uppercase tracking-wider font-medium">Cryptocurrency</span>
+                                    <span className="text-zinc-700">|</span>
+                                    <span className="text-xs text-zinc-500 uppercase tracking-wider">Go / Rust / CUDA</span>
+                                </div>
+                                <h3 className="text-2xl sm:text-3xl font-bold group-hover:text-cyan-400 transition-colors">
+                                    Dilithium
+                                </h3>
+                                <p className="text-zinc-400 text-sm mt-4 leading-relaxed">
+                                    A quantum-safe proof-of-work cryptocurrency built entirely from scratch in Go. Inspired by the crystalline power source from Star Trek, Dilithium uses CRYSTALS-Dilithium post-quantum signatures (NIST FIPS 204) to secure every transaction from block zero — no migration needed when quantum computers arrive.
+                                </p>
+                                <div className="flex flex-wrap gap-2 mt-5">
+                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">Quantum-Safe</span>
+                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">SHA-256 PoW</span>
+                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">25M Fixed Supply</span>
+                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">GPU Mining</span>
+                                </div>
+                                <div className="flex items-center gap-2 mt-6 text-sm text-zinc-500 group-hover:text-cyan-400 transition-colors">
+                                    <span>Visit dilithiumcoin.com</span>
+                                    <svg
+                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    {/* PFactor */}
+                    <a
+                        href="https://pfactor.app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-sky-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-sky-500/10 mt-6"
+                    >
+                        <div className="grid md:grid-cols-2 gap-0">
+                            {/* Left - Visual */}
+                            <div className="relative bg-gradient-to-br from-sky-950/50 via-zinc-900 to-blue-950/30 flex items-center justify-center p-10 min-h-[280px] overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/0 to-blue-500/0 group-hover:from-sky-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
+                                {/* Voice visualization from pfactor.app */}
+                                <div className="relative z-10 w-full max-w-xs">
+                                    <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-xl p-5 shadow-2xl">
+                                        {/* AI Examiner bubble */}
+                                        <div className="flex items-start gap-3">
+                                            <div className="flex-shrink-0">
+                                                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center">
+                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-[10px] text-sky-400 font-medium mb-1">AI Examiner</p>
+                                                <p className="text-xs text-white/90 leading-relaxed">&ldquo;Can you explain what a SIGMET is and how it would affect your flight planning?&rdquo;</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Microphone + waveform */}
+                                        <div className="mt-4 pt-4 border-t border-slate-700/50">
+                                            <div className="flex items-center gap-3">
+                                                <div className="relative flex-shrink-0">
+                                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
+                                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div className="absolute inset-0 rounded-full bg-emerald-400/30 animate-pulse" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[10px] text-emerald-400 font-medium mb-1">Listening...</p>
+                                                    <div className="flex items-center gap-[2px]">
+                                                        {[30, 17, 20, 24, 22, 26, 14, 22, 28, 29, 26, 18, 24, 8, 20, 16, 28, 14, 22, 10].map((h, i) => (
+                                                            <div
+                                                                key={i}
+                                                                className="w-[3px] bg-emerald-400/60 rounded-full"
+                                                                style={{
+                                                                    height: `${h * 0.6}px`,
+                                                                    animation: `waveform 1s ease-in-out ${i * 0.05}s infinite alternate`,
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right - Info */}
+                            <div className="p-8 flex flex-col justify-center">
+                                <div className="flex items-center gap-3 mb-3">
+                                    <span className="text-xs text-sky-400 uppercase tracking-wider font-medium">iOS App</span>
+                                    <span className="text-zinc-700">|</span>
+                                    <span className="text-xs text-zinc-500 uppercase tracking-wider">AI / Aviation</span>
+                                </div>
+                                <h3 className="text-2xl sm:text-3xl font-bold group-hover:text-sky-400 transition-colors">
+                                    PFactor
+                                </h3>
+                                <p className="text-zinc-400 text-sm mt-4 leading-relaxed">
+                                    An AI-powered voice-based oral exam simulator for student pilots preparing for their private pilot checkride. PFactor uses real-time speech recognition and an adaptive AI examiner that mimics real checkride conditions — asking follow-up questions, identifying weak areas, and referencing FAR/AIM regulations on the fly. No typing, no multiple choice — just natural conversation aligned with FAA Airman Certification Standards.
+                                </p>
+                                <div className="flex flex-wrap gap-2 mt-5">
+                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">Voice AI</span>
+                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">FAA ACS Aligned</span>
+                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">Adaptive Learning</span>
+                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">iOS</span>
+                                </div>
+                                <div className="flex items-center gap-2 mt-6 text-sm text-zinc-500 group-hover:text-sky-400 transition-colors">
+                                    <span>Visit pfactor.app</span>
+                                    <svg
+                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            {/* ===== WEB DEVELOPMENT PROJECTS ===== */}
+            <section className="py-28 relative">
+                {/* Background accent */}
+                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-glow" />
+                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
+
+                <div className="max-w-5xl mx-auto px-6 relative z-10">
+                    <div className="text-center mb-16">
+                        <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
+                            Client Work
+                        </span>
+                        <h2 className="text-4xl sm:text-5xl font-bold mt-4">
+                            Web Development
+                        </h2>
+                        <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
+                            Real projects for real clients — delivered on time and on budget.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* BMG Aviation */}
                         <a
                             href="https://bmg.dimario.dev"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10"
                         >
-                            <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
-                                <div className="text-center relative z-10">
-                                    <div className="w-14 h-14 mx-auto bg-purple-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
-                                        <svg
-                                            className="w-7 h-7 text-purple-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={1.5}
-                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
+                            <div className="aspect-[2/1] relative overflow-hidden">
+                                <img
+                                    src="/projects/bmg-aviation.webp"
+                                    alt="BMG Jet Center"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
                             </div>
-                            <div className="p-5">
-                                <span className="text-xs text-purple-400 uppercase tracking-wider">
-                                    Web Development
+                            <div className="p-6">
+                                <span className="text-xs text-purple-400 uppercase tracking-wider font-medium">
+                                    Aviation / FBO
                                 </span>
-                                <h3 className="text-lg font-semibold mt-1 group-hover:text-purple-400 transition-colors">
-                                    BMG Aviation
+                                <h3 className="text-xl font-semibold mt-2 group-hover:text-purple-400 transition-colors">
+                                    BMG Jet Center
                                 </h3>
-                                <p className="text-zinc-400 text-sm mt-2">
-                                    Professional FBO website with a modern
-                                    design.
+                                <p className="text-zinc-400 text-sm mt-3 leading-relaxed">
+                                    Full website for a Fixed Base Operator at Monroe County Airport in Bloomington, Indiana. BMG Jet Center has over 70 years of aviation history, offering fuel services, hangar storage, flight training, charter flights, and full-service line operations for general aviation and corporate travelers.
                                 </p>
-                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-purple-400 transition-colors">
+                                <div className="flex items-center gap-2 mt-5 text-sm text-zinc-500 group-hover:text-purple-400 transition-colors">
                                     <span>View Live Site</span>
                                     <svg
                                         className="w-4 h-4 group-hover:translate-x-1 transition-transform"
@@ -522,101 +741,32 @@ export default function Home() {
                             </div>
                         </a>
 
-                        {/* Project 3 - PFactor */}
-                        <a
-                            href="https://pfactor.app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-sky-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-sky-500/10"
-                        >
-                            <div className="aspect-video bg-gradient-to-br from-sky-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/0 to-blue-500/0 group-hover:from-sky-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
-                                <div className="text-center relative z-10">
-                                    <div className="w-14 h-14 mx-auto bg-sky-500/20 border border-sky-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
-                                        <svg
-                                            className="w-7 h-7 text-sky-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={1.5}
-                                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-5">
-                                <span className="text-xs text-sky-400 uppercase tracking-wider">
-                                    App Development
-                                </span>
-                                <h3 className="text-lg font-semibold mt-1 group-hover:text-sky-400 transition-colors">
-                                    PFactor
-                                </h3>
-                                <p className="text-zinc-400 text-sm mt-2">
-                                    AI-powered private pilot oral exam practice
-                                    app for iOS.
-                                </p>
-                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-sky-400 transition-colors">
-                                    <span>View Live Site</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-                        {/* Project 1 - Pocopson Vet Station */}
+                        {/* Pocopson Veterinary Station */}
                         <a
                             href="https://pocopsonvetstation.dimario.dev"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10"
                         >
-                            <div className="aspect-video bg-gradient-to-br from-blue-900/30 to-zinc-900 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
-                                <div className="text-center relative z-10">
-                                    <div className="w-14 h-14 mx-auto bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-300">
-                                        <svg
-                                            className="w-7 h-7 text-blue-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={1.5}
-                                                d="M12 21a9 9 0 01-9-9c0-2.52 1.02-4.8 2.67-6.45L12 0l6.33 5.55A9 9 0 0121 12a9 9 0 01-9 9zm0-3a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
+                            <div className="aspect-[2/1] relative overflow-hidden">
+                                <img
+                                    src="/projects/pocopson-vet.webp"
+                                    alt="Pocopson Veterinary Station"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
                             </div>
-                            <div className="p-5">
-                                <span className="text-xs text-blue-400 uppercase tracking-wider">
-                                    Web Development
+                            <div className="p-6">
+                                <span className="text-xs text-blue-400 uppercase tracking-wider font-medium">
+                                    Veterinary / Healthcare
                                 </span>
-                                <h3 className="text-lg font-semibold mt-1 group-hover:text-blue-400 transition-colors">
+                                <h3 className="text-xl font-semibold mt-2 group-hover:text-blue-400 transition-colors">
                                     Pocopson Veterinary Station
                                 </h3>
-                                <p className="text-zinc-400 text-sm mt-2">
-                                    Modern, responsive website for a local
-                                    veterinary practice.
+                                <p className="text-zinc-400 text-sm mt-3 leading-relaxed">
+                                    Modern, responsive website for an independent veterinary practice in West Chester, PA. Operating out of a beautifully preserved 1893 railroad station listed on the Chester County Register of Historic Places, they combine compassionate care with modern technology like CO2 surgical lasers and digital dental X-rays.
                                 </p>
-                                <div className="flex items-center gap-2 mt-4 text-sm text-zinc-500 group-hover:text-blue-400 transition-colors">
+                                <div className="flex items-center gap-2 mt-5 text-sm text-zinc-500 group-hover:text-blue-400 transition-colors">
                                     <span>View Live Site</span>
                                     <svg
                                         className="w-4 h-4 group-hover:translate-x-1 transition-transform"
