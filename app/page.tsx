@@ -1043,7 +1043,7 @@ export default function Home() {
             <footer className="py-8 border-t border-zinc-900/50">
                 <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-sm text-zinc-600">
-                        © 2025 DiMario Development. All rights reserved.
+                        © 2026 DiMario Development. All rights reserved.
                     </p>
                     <a href="#" className="text-lg font-bold group">
                         <span className="text-white group-hover:text-blue-400 transition-colors">
