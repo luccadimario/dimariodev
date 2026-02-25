@@ -703,7 +703,7 @@ export default function Home() {
                             href="https://bmg.dimario.dev"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 will-change-transform"
+                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 will-change-transform"
                         >
                             <div className="aspect-[2/1] relative">
                                 <img
@@ -747,9 +747,9 @@ export default function Home() {
                             href="https://pocopsonvetstation.dimario.dev"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10 will-change-transform"
+                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10 will-change-transform"
                         >
-                            <div className="aspect-[2/1] relative">
+                            <div className="aspect-[2/1] relative" style={{ backfaceVisibility: 'hidden' }}>
                                 <img
                                     src="/projects/pocopson-vet.webp"
                                     alt="Pocopson Veterinary Station"
