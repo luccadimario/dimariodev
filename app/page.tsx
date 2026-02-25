@@ -333,8 +333,9 @@ export default function Home() {
 
             {/* ===== SERVICES ===== */}
             <section id="services" className="py-28 relative">
-                {/* Background accent */}
+                {/* Background accents */}
                 <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] -translate-y-1/2 animate-pulse-glow" />
+                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-500/8 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
 
                 <div className="max-w-5xl mx-auto px-6 relative z-10">
                     <div className="text-center mb-16">
@@ -353,7 +354,7 @@ export default function Home() {
 
                     <div className="grid md:grid-cols-3 gap-6">
                         {/* Service 1 */}
-                        <div className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div className="group relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10">
                             <span className="text-xs font-mono text-blue-400">
                                 01
                             </span>
@@ -702,13 +703,13 @@ export default function Home() {
                             href="https://bmg.dimario.dev"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10"
+                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 will-change-transform"
                         >
-                            <div className="aspect-[2/1] relative overflow-hidden">
+                            <div className="aspect-[2/1] relative">
                                 <img
                                     src="/projects/bmg-aviation.webp"
                                     alt="BMG Jet Center"
-                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-500"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
                             </div>
@@ -746,13 +747,13 @@ export default function Home() {
                             href="https://pocopsonvetstation.dimario.dev"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10"
+                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10 will-change-transform"
                         >
-                            <div className="aspect-[2/1] relative overflow-hidden">
+                            <div className="aspect-[2/1] relative">
                                 <img
                                     src="/projects/pocopson-vet.webp"
                                     alt="Pocopson Veterinary Station"
-                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-500"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
                             </div>
