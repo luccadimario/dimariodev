@@ -53,21 +53,12 @@ export const metadata: Metadata = {
         title: "Carmen Lucca DiMario | Software Engineer",
         description:
             "Embedded systems and full-stack engineer. Clang toolchains, ROS2 autonomy on UAVs, a post-quantum blockchain in Go, and an AI checkride examiner for pilots.",
-        images: [
-            {
-                url: "/og-image.png",
-                width: 1200,
-                height: 630,
-                alt: "Carmen Lucca DiMario — Software Engineer",
-            },
-        ],
     },
     twitter: {
         card: "summary_large_image",
         title: "Carmen Lucca DiMario | Software Engineer",
         description:
             "Embedded systems and full-stack engineer. Clang toolchains, ROS2 autonomy, post-quantum crypto, and shipped products.",
-        images: ["/og-image.png"],
     },
     robots: {
         index: true,
@@ -93,7 +84,7 @@ export default function RootLayout({
         name: "Carmen Lucca DiMario",
         alternateName: "Lucca DiMario",
         url: "https://dimario.dev",
-        image: "https://dimario.dev/og-image.png",
+        image: "https://dimario.dev/opengraph-image",
         email: "luccadimario@gmail.com",
         jobTitle: "Software Engineer",
         description:

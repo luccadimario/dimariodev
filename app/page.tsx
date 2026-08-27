@@ -414,7 +414,7 @@ export default function Home() {
                         <SectionHeading
                             eyebrow="Selected Work"
                             title="Things I've built"
-                            blurb="A post-quantum blockchain, an AI checkride examiner, and the middleware flying a drone. Each one was shipped, tested, or published, not a tutorial follow-along."
+                            blurb="A post-quantum blockchain, an AI checkride examiner, and the middleware flying a drone. Each one was shipped, tested, or published."
                         />
                     </Reveal>
 
