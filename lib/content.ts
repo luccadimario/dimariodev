@@ -13,7 +13,7 @@ export const profile = {
     email: "luccadimario@gmail.com",
     phone: "(484) 467-2466",
     github: "https://github.com/luccadimario",
-    resume: "/lucca-dimario-resume.pdf",
+    resume: "/carmen-lucca-dimario-resume.pdf",
     status: "M.S. Computer Science @ Embry-Riddle · Open to SWE roles",
 } as const;
 
@@ -195,6 +195,17 @@ export const experience: Job[] = [
             "Redesigned and improved the testing framework for the entire Accuro software suite, increasing reliability",
         ],
         stack: ["C", "C++", "PETSc", "Numerical methods", "Test infrastructure"],
+    },
+    {
+        company: "ivDash",
+        role: "Full Stack Development Intern",
+        period: "May 2024 — August 2024",
+        bullets: [
+            "Led development of an admin dashboard consolidating functionality for doctors, nurses, and product providers across a digitalized healthcare distribution platform",
+            "Built interactive web interfaces in Next.js against an existing Symfony PHP backend",
+            "Streamlined Auth0 JWT authentication to work across both the Symfony PHP and Next.js applications",
+        ],
+        stack: ["Next.js", "TypeScript", "Symfony", "PHP", "Auth0 / JWT"],
     },
 ];
 
