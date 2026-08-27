@@ -16,21 +16,22 @@ export async function POST(request: Request) {
         }
 
         const projectTypeLabels: Record<string, string> = {
-            web: "Web Development",
-            app: "App Development",
-            consultation: "Web Consultation",
+            role: "Job or internship opportunity",
+            freelance: "Freelance project",
+            collab: "Research or collaboration",
+            other: "Something else",
         };
 
         const { data, error } = await resend.emails.send({
             from: "Contact Form <onboarding@resend.dev>",
             to: ["luccadimario@gmail.com"],
             replyTo: email,
-            subject: `New Contact Form Submission from ${name}`,
+            subject: `dimario.dev — ${projectTypeLabels[projectType] || "New message"} from ${name}`,
             html: `
                 <h2>New Contact Form Submission</h2>
                 <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Project Type:</strong> ${projectTypeLabels[projectType] || "Not specified"}</p>
+                <p><strong>Reason:</strong> ${projectTypeLabels[projectType] || "Not specified"}</p>
                 <p><strong>Message:</strong></p>
                 <p>${message.replace(/\n/g, "<br>")}</p>
             `,

@@ -7,30 +7,32 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     metadataBase: new URL("https://dimario.dev"),
     title: {
-        default: "DiMario Development | Custom Web & App Development Services",
-        template: "%s | DiMario Development",
+        default: "Carmen Lucca DiMario | Software Engineer",
+        template: "%s | Carmen Lucca DiMario",
     },
     description:
-        "Professional web and mobile app development studio. We build fast, affordable, custom websites and applications with direct communication and quick turnaround. Next.js, React, React Native specialists.",
+        "Software engineer working across embedded systems and full-stack product. M.S. Computer Science candidate at Embry-Riddle, previously embedded software at Garmin. Compiler toolchains, ROS2 autonomy, Go blockchains, iOS, and Next.js.",
     keywords: [
-        "web development",
-        "app development",
-        "mobile app development",
-        "website design",
-        "custom web development",
-        "React developer",
+        "Lucca DiMario",
+        "Carmen Lucca DiMario",
+        "software engineer",
+        "embedded software engineer",
+        "embedded systems",
+        "ROS2 developer",
+        "robotics software",
+        "compiler engineering",
+        "Clang",
+        "Go developer",
+        "Swift iOS developer",
         "Next.js developer",
-        "React Native developer",
-        "freelance web developer",
-        "affordable web development",
-        "small business website",
-        "web development agency",
-        "DiMario Development",
+        "Embry-Riddle computer science",
+        "Garmin",
+        "software engineering portfolio",
         "dimario.dev",
     ],
-    authors: [{ name: "DiMario Development", url: "https://dimario.dev" }],
-    creator: "DiMario Development",
-    publisher: "DiMario Development",
+    authors: [{ name: "Carmen Lucca DiMario", url: "https://dimario.dev" }],
+    creator: "Carmen Lucca DiMario",
+    publisher: "Carmen Lucca DiMario",
     formatDetection: {
         email: false,
         address: false,
@@ -40,30 +42,32 @@ export const metadata: Metadata = {
         icon: "/dimariodev2.png",
         apple: "/dimariodev2.png",
     },
+    alternates: {
+        canonical: "https://dimario.dev",
+    },
     openGraph: {
-        type: "website",
+        type: "profile",
         locale: "en_US",
         url: "https://dimario.dev",
-        siteName: "DiMario Development",
-        title: "DiMario Development | Custom Web & App Development",
+        siteName: "Carmen Lucca DiMario",
+        title: "Carmen Lucca DiMario | Software Engineer",
         description:
-            "Skip the corporate runaround. Professional web and mobile app development with fast turnaround, affordable rates, and direct communication.",
+            "Embedded systems and full-stack engineer. Clang toolchains, ROS2 autonomy on UAVs, a post-quantum blockchain in Go, and an AI checkride examiner for pilots.",
         images: [
             {
                 url: "/og-image.png",
                 width: 1200,
                 height: 630,
-                alt: "DiMario Development - Web & App Development",
+                alt: "Carmen Lucca DiMario — Software Engineer",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "DiMario Development | Custom Web & App Development",
+        title: "Carmen Lucca DiMario | Software Engineer",
         description:
-            "Professional web and mobile app development with fast turnaround and affordable rates.",
+            "Embedded systems and full-stack engineer. Clang toolchains, ROS2 autonomy, post-quantum crypto, and shipped products.",
         images: ["/og-image.png"],
-        creator: "@dimariodev",
     },
     robots: {
         index: true,
@@ -76,10 +80,6 @@ export const metadata: Metadata = {
             "max-snippet": -1,
         },
     },
-    verification: {
-        // Add your Google Search Console verification code here
-        // google: "your-google-verification-code",
-    },
 };
 
 export default function RootLayout({
@@ -89,54 +89,29 @@ export default function RootLayout({
 }) {
     const jsonLd = {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        name: "DiMario Development",
-        description:
-            "Professional web and mobile app development studio specializing in custom websites, web applications, and mobile apps.",
+        "@type": "Person",
+        name: "Carmen Lucca DiMario",
+        alternateName: "Lucca DiMario",
         url: "https://dimario.dev",
-        logo: "https://dimario.dev/dimariodev2.png",
         image: "https://dimario.dev/og-image.png",
-        email: "hello@dimario.dev",
-        priceRange: "$$",
-        serviceType: [
-            "Web Development",
-            "Mobile App Development",
-            "Web Consultation",
-        ],
-        areaServed: "Worldwide",
-        hasOfferCatalog: {
-            "@type": "OfferCatalog",
-            name: "Web Development Services",
-            itemListElement: [
-                {
-                    "@type": "Offer",
-                    itemOffered: {
-                        "@type": "Service",
-                        name: "Web Development",
-                        description:
-                            "Custom websites and web applications built with modern technologies like Next.js and React.",
-                    },
-                },
-                {
-                    "@type": "Offer",
-                    itemOffered: {
-                        "@type": "Service",
-                        name: "App Development",
-                        description:
-                            "Native and cross-platform mobile applications for iOS and Android using React Native.",
-                    },
-                },
-                {
-                    "@type": "Offer",
-                    itemOffered: {
-                        "@type": "Service",
-                        name: "Web Consultation",
-                        description:
-                            "Strategic guidance for technology decisions, code audits, and architecture planning.",
-                    },
-                },
-            ],
+        email: "luccadimario@gmail.com",
+        jobTitle: "Software Engineer",
+        description:
+            "Software engineer working across embedded systems, robotics, and full-stack product development.",
+        sameAs: ["https://github.com/luccadimario"],
+        alumniOf: {
+            "@type": "CollegeOrUniversity",
+            name: "Embry-Riddle Aeronautical University",
         },
+        knowsAbout: [
+            "Embedded Systems",
+            "Compiler Toolchains",
+            "ROS2",
+            "Robotics",
+            "Post-Quantum Cryptography",
+            "iOS Development",
+            "Next.js",
+        ],
     };
 
     return (

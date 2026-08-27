@@ -1,17 +1,173 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import {
+    profile,
+    projects,
+    experience,
+    publications,
+    skills,
+    education,
+    extras,
+    type Accent,
+} from "@/lib/content";
 
 const FloatingShapes3D = dynamic(
     () => import("@/components/FloatingShapes3D"),
     { ssr: false },
 );
 
+// Full class strings — Tailwind only sees literals, never interpolated names.
+const accents: Record<
+    Accent,
+    {
+        text: string;
+        border: string;
+        shadow: string;
+        dot: string;
+        bar: string;
+        linkHover: string;
+        groupLink: string;
+    }
+> = {
+    blue: {
+        text: "text-blue-400",
+        border: "hover:border-blue-500/40",
+        shadow: "hover:shadow-blue-500/10",
+        dot: "bg-blue-500",
+        bar: "from-blue-500 to-blue-600",
+        linkHover: "hover:text-blue-400",
+        groupLink: "group-hover:text-blue-400",
+    },
+    purple: {
+        text: "text-purple-400",
+        border: "hover:border-purple-500/40",
+        shadow: "hover:shadow-purple-500/10",
+        dot: "bg-purple-500",
+        bar: "from-purple-500 to-purple-600",
+        linkHover: "hover:text-purple-400",
+        groupLink: "group-hover:text-purple-400",
+    },
+    amber: {
+        text: "text-amber-400",
+        border: "hover:border-amber-500/40",
+        shadow: "hover:shadow-amber-500/10",
+        dot: "bg-amber-500",
+        bar: "from-amber-500 to-amber-600",
+        linkHover: "hover:text-amber-400",
+        groupLink: "group-hover:text-amber-400",
+    },
+    emerald: {
+        text: "text-emerald-400",
+        border: "hover:border-emerald-500/40",
+        shadow: "hover:shadow-emerald-500/10",
+        dot: "bg-emerald-500",
+        bar: "from-emerald-500 to-emerald-600",
+        linkHover: "hover:text-emerald-400",
+        groupLink: "group-hover:text-emerald-400",
+    },
+};
+
+const navLinks = [
+    { href: "#work", label: "Work" },
+    { href: "#experience", label: "Experience" },
+    { href: "#about", label: "About" },
+    { href: "#contact", label: "Contact" },
+];
+
+/** Fades a section in the first time it scrolls into view. */
+function Reveal({
+    children,
+    delay = 0,
+    className = "",
+}: {
+    children: React.ReactNode;
+    delay?: number;
+    className?: string;
+}) {
+    const ref = useRef<HTMLDivElement>(null);
+    const [shown, setShown] = useState(false);
+
+    useEffect(() => {
+        const node = ref.current;
+        if (!node) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setShown(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+        );
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={`transition-all duration-700 ease-out ${
+                shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            } ${className}`}
+            style={{ transitionDelay: `${delay}ms` }}
+        >
+            {children}
+        </div>
+    );
+}
+
+function ArrowIcon({ className = "" }: { className?: string }) {
+    return (
+        <svg
+            className={className}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+        </svg>
+    );
+}
+
+function SectionHeading({
+    eyebrow,
+    title,
+    blurb,
+}: {
+    eyebrow: string;
+    title: string;
+    blurb?: string;
+}) {
+    return (
+        <div className="mb-14">
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-px bg-gradient-to-r from-blue-500 to-purple-500" />
+                <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
+                    {eyebrow}
+                </span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold mt-4">{title}</h2>
+            {blurb && (
+                <p className="text-zinc-400 mt-4 max-w-2xl leading-relaxed">
+                    {blurb}
+                </p>
+            )}
+        </div>
+    );
+}
+
 export default function Home() {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [loaded, setLoaded] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     // Contact form state
     const [formData, setFormData] = useState({
@@ -30,10 +186,7 @@ export default function Home() {
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
         >,
     ) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -49,7 +202,6 @@ export default function Home() {
             });
 
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.error || "Failed to send message");
             }
@@ -64,6 +216,16 @@ export default function Home() {
         }
     };
 
+    const copyEmail = async () => {
+        try {
+            await navigator.clipboard.writeText(profile.email);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            // Clipboard unavailable — the mailto link below still works.
+        }
+    };
+
     useEffect(() => {
         setLoaded(true);
         const handleMouse = (e: MouseEvent) => {
@@ -73,16 +235,18 @@ export default function Home() {
         return () => window.removeEventListener("mousemove", handleMouse);
     }, []);
 
+    const featured = projects.filter((p) => p.featured);
+    const rest = projects.filter((p) => !p.featured);
+
     return (
         <main className="bg-[#030303] text-white min-h-screen overflow-x-hidden">
-            {/* Noise texture overlay */}
             <div className="noise-overlay" />
 
-            {/* Mouse glow effect */}
+            {/* Mouse glow */}
             <div
                 className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
                 style={{
-                    background: `radial-gradient(800px at ${mousePos.x}px ${mousePos.y}px, rgba(59,130,246,0.15), transparent 60%)`,
+                    background: `radial-gradient(800px at ${mousePos.x}px ${mousePos.y}px, rgba(59,130,246,0.13), transparent 60%)`,
                 }}
             />
 
@@ -91,44 +255,36 @@ export default function Home() {
                 <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
                     <a href="#" className="text-lg font-bold group">
                         <span className="text-white group-hover:text-blue-400 transition-colors">
-                            DIMARIO
+                            CARMEN
                         </span>
-                        <span className="text-zinc-500">.DEV</span>
+                        <span className="text-zinc-500">.DIMARIO</span>
                     </a>
 
                     <div className="hidden md:flex items-center gap-8">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                className="text-sm text-zinc-400 hover:text-white transition-colors relative group"
+                            >
+                                {link.label}
+                                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-300" />
+                            </a>
+                        ))}
                         <a
-                            href="#services"
-                            className="text-sm text-zinc-400 hover:text-white transition-colors relative group"
-                        >
-                            Services
-                            <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-300" />
-                        </a>
-                        <a
-                            href="#work"
-                            className="text-sm text-zinc-400 hover:text-white transition-colors relative group"
-                        >
-                            Work
-                            <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-300" />
-                        </a>
-                        <a
-                            href="#contact"
-                            className="text-sm text-zinc-400 hover:text-white transition-colors relative group"
-                        >
-                            Contact
-                            <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-300" />
-                        </a>
-                        <a
-                            href="#contact"
+                            href={profile.resume}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-sm font-medium bg-white text-black px-5 py-2 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25"
                         >
-                            Get in Touch
+                            Résumé
                         </a>
                     </div>
 
                     <button
                         className="md:hidden p-2 text-zinc-400 hover:text-white transition-colors"
                         onClick={() => setMenuOpen(!menuOpen)}
+                        aria-label="Toggle menu"
                     >
                         <svg
                             className="w-5 h-5"
@@ -136,47 +292,39 @@ export default function Home() {
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                         >
-                            {menuOpen ? (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            ) : (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            )}
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d={
+                                    menuOpen
+                                        ? "M6 18L18 6M6 6l12 12"
+                                        : "M4 6h16M4 12h16M4 18h16"
+                                }
+                            />
                         </svg>
                     </button>
                 </div>
 
                 {menuOpen && (
                     <div className="md:hidden bg-[#030303]/95 backdrop-blur-xl border-t border-white/5 px-6 py-4 space-y-4">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                onClick={() => setMenuOpen(false)}
+                                className="block text-zinc-400 hover:text-white transition-colors"
+                            >
+                                {link.label}
+                            </a>
+                        ))}
                         <a
-                            href="#services"
-                            onClick={() => setMenuOpen(false)}
-                            className="block text-zinc-400 hover:text-white transition-colors"
+                            href={profile.resume}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block text-blue-400 hover:text-blue-300 transition-colors"
                         >
-                            Services
-                        </a>
-                        <a
-                            href="#work"
-                            onClick={() => setMenuOpen(false)}
-                            className="block text-zinc-400 hover:text-white transition-colors"
-                        >
-                            Work
-                        </a>
-                        <a
-                            href="#contact"
-                            onClick={() => setMenuOpen(false)}
-                            className="block text-zinc-400 hover:text-white transition-colors"
-                        >
-                            Contact
+                            Résumé ↗
                         </a>
                     </div>
                 )}
@@ -184,874 +332,689 @@ export default function Home() {
 
             {/* ===== HERO ===== */}
             <section className="min-h-screen flex items-center relative">
-                {/* Animated background blurs */}
                 <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse-glow" />
                 <div
                     className="absolute top-1/3 left-[20%] w-[300px] h-[300px] bg-purple-500/15 rounded-full blur-[100px] animate-pulse-glow"
                     style={{ animationDelay: "2s" }}
                 />
 
-                {/* 3D Floating geometric shapes */}
                 <FloatingShapes3D mousePos={mousePos} />
 
-                <div className="max-w-5xl mx-auto px-6 pt-24 pb-16 w-full relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        {/* Left column - Text */}
-                        <div
-                            className={`space-y-6 ${loaded ? "animate-slide-in-left" : "opacity-0"}`}
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-px bg-gradient-to-r from-blue-500 to-purple-500" />
-                                <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
-                                    Web & App Development
-                                </span>
-                            </div>
-
-                            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[0.95]">
-                                <span className="text-white">DIMARIO</span>
-                                <br />
-                                <span className="gradient-text-cool">
-                                    DEVELOPMENT
-                                </span>
-                            </h1>
-
-                            <p className="text-zinc-400 text-lg max-w-md leading-relaxed">
-                                Skip the corporate runaround. We're a private
-                                studio that delivers high-quality websites and
-                                apps — fast, affordable, and with a real person
-                                you can actually reach.
-                            </p>
-
-                            {/* Value props */}
-                            <div className="flex flex-wrap gap-3 pt-2">
-                                <span className="text-xs px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-400">
-                                    Privately Owned
-                                </span>
-                                <span className="text-xs px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-400">
-                                    Fast Turnaround
-                                </span>
-                                <span className="text-xs px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-400">
-                                    Affordable Rates
-                                </span>
-                                <span className="text-xs px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-400">
-                                    Direct Communication
-                                </span>
-                            </div>
-
-                            <div className="flex flex-wrap gap-4 pt-4">
-                                <a
-                                    href="#work"
-                                    className="group inline-flex items-center gap-2 bg-white text-black font-medium px-6 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:gap-3"
-                                >
-                                    View Our Work
-                                    <svg
-                                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                        />
-                                    </svg>
-                                </a>
-                                <a
-                                    href="#contact"
-                                    className="group inline-flex items-center gap-2 border border-zinc-700 text-white font-medium px-6 py-3 rounded-full hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300"
-                                >
-                                    Start a Project
-                                </a>
-                            </div>
-                        </div>
-
-                        {/* Right column - Visual */}
-                        <div
-                            className={`relative ${loaded ? "animate-slide-in-right" : "opacity-0"}`}
-                        >
-                            <div className="relative max-w-sm mx-auto lg:ml-auto">
-                                {/* Animated background card */}
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl rotate-6 translate-x-3 translate-y-3 animate-float"
-                                    style={{ animationDelay: "0.5s" }}
-                                />
-
-                                {/* Main card */}
-                                <div className="relative bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center aspect-square">
-                                    <div className="w-16 h-16 border-2 border-zinc-700 rounded-2xl flex items-center justify-center mb-6 group-hover:border-blue-500 transition-colors">
-                                        <svg
-                                            className="w-8 h-8 text-zinc-500"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={1.5}
-                                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="w-24 h-2 bg-zinc-800 rounded-full" />
-                                        <div className="w-16 h-2 bg-zinc-800 rounded-full mx-auto" />
-                                    </div>
-
-                                    {/* Animated corner accents */}
-                                    <div className="absolute top-0 right-0 w-20 h-20 border-b border-l border-blue-500/30 rounded-bl-3xl" />
-                                </div>
-
-                                {/* Floating logo block */}
-                                <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-zinc-900 rounded-2xl animate-float shadow-lg shadow-blue-500/25 flex items-center justify-center overflow-hidden border border-zinc-800">
-                                    <img
-                                        src="/dimariodev2.png"
-                                        alt="DiMario Dev Logo"
-                                        className="w-16 h-16 object-contain"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Scroll indicator */}
+                <div className="max-w-5xl mx-auto px-6 pt-28 pb-20 w-full relative z-10">
                     <div
-                        className={`hidden lg:flex items-center gap-3 mt-16 ${loaded ? "animate-slide-up delay-500" : "opacity-0"}`}
+                        className={`space-y-7 max-w-3xl ${loaded ? "animate-slide-in-left" : "opacity-0"}`}
                     >
-                        <div className="w-px h-12 bg-gradient-to-b from-zinc-600 to-transparent" />
-                        <span
-                            className="text-xs text-zinc-600 uppercase tracking-widest"
-                            style={{ writingMode: "vertical-rl" }}
-                        >
-                            Scroll
-                        </span>
-                    </div>
-                </div>
-            </section>
+                        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/5">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                            </span>
+                            <span className="text-xs text-emerald-300/90">
+                                {profile.status}
+                            </span>
+                        </div>
 
-            {/* ===== SERVICES ===== */}
-            <section id="services" className="py-28 relative">
-                {/* Background accents */}
-                <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] -translate-y-1/2 animate-pulse-glow" />
-                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-500/8 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
+                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[0.95]">
+                            <span className="text-white">CARMEN LUCCA</span>
+                            <br />
+                            <span className="gradient-text-cool">DIMARIO</span>
+                        </h1>
 
-                <div className="max-w-5xl mx-auto px-6 relative z-10">
-                    <div className="text-center mb-16">
-                        <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
-                            What We Do
-                        </span>
-                        <h2 className="text-4xl sm:text-5xl font-bold mt-4">
-                            Services
-                        </h2>
-                        <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
-                            Quality work without the agency markup. We keep
-                            overhead low so you get professional results at
-                            rates that make sense.
+                        <p className="text-zinc-400 text-lg max-w-xl leading-relaxed">
+                            {profile.tagline}
                         </p>
-                    </div>
 
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {/* Service 1 */}
-                        <div className="group relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10">
-                            <span className="text-xs font-mono text-blue-400">
-                                01
-                            </span>
-                            <h3 className="text-xl font-semibold mt-4 mb-3 group-hover:text-blue-400 transition-colors">
-                                Web Development
-                            </h3>
-                            <p className="text-zinc-400 text-sm leading-relaxed mb-5">
-                                Custom websites and web applications built with
-                                modern technologies. Fast, responsive, and SEO
-                                optimized.
-                            </p>
-                            <ul className="space-y-2 text-xs text-zinc-500">
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                                    Next.js & React
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                                    Performance Optimized
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                                    SEO Ready
-                                </li>
-                            </ul>
-                            {/* Hover line */}
-                            <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
-                        </div>
-
-                        {/* Service 2 */}
-                        <div className="group relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10">
-                            <span className="text-xs font-mono text-purple-400">
-                                02
-                            </span>
-                            <h3 className="text-xl font-semibold mt-4 mb-3 group-hover:text-purple-400 transition-colors">
-                                App Development
-                            </h3>
-                            <p className="text-zinc-400 text-sm leading-relaxed mb-5">
-                                Native and cross-platform mobile applications
-                                that deliver seamless experiences across all
-                                devices.
-                            </p>
-                            <ul className="space-y-2 text-xs text-zinc-500">
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full" />
-                                    iOS & Android
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full" />
-                                    React Native
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full" />
-                                    App Store Ready
-                                </li>
-                            </ul>
-                            <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r from-purple-500 to-purple-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
-                        </div>
-
-                        {/* Service 3 */}
-                        <div className="group relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 hover:border-amber-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-500/10">
-                            <span className="text-xs font-mono text-amber-400">
-                                03
-                            </span>
-                            <h3 className="text-xl font-semibold mt-4 mb-3 group-hover:text-amber-400 transition-colors">
-                                Web Consultation
-                            </h3>
-                            <p className="text-zinc-400 text-sm leading-relaxed mb-5">
-                                Strategic guidance to help you make the right
-                                technology decisions for your business goals.
-                            </p>
-                            <ul className="space-y-2 text-xs text-zinc-500">
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-                                    Tech Strategy
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-                                    Code Audits
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-                                    Architecture Planning
-                                </li>
-                            </ul>
-                            <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r from-amber-500 to-amber-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ===== PERSONAL PROJECTS ===== */}
-            <section id="work" className="py-28 relative">
-                {/* Background accent */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-glow" />
-                <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "3s" }} />
-
-                <div className="max-w-5xl mx-auto px-6 relative z-10">
-                    <div className="text-center mb-16">
-                        <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
-                            Built from Scratch
-                        </span>
-                        <h2 className="text-4xl sm:text-5xl font-bold mt-4">
-                            Personal Projects
-                        </h2>
-                        <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
-                            Passion-driven projects built from the ground up — exploring new technologies and pushing boundaries.
-                        </p>
-                    </div>
-
-                    {/* Dilithium - Featured Project */}
-                    <a
-                        href="https://dilithiumcoin.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-cyan-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10"
-                    >
-                        <div className="grid md:grid-cols-2 gap-0">
-                            {/* Left - Visual */}
-                            <div className="relative bg-gradient-to-br from-cyan-950/50 via-zinc-900 to-purple-950/30 flex items-center justify-center p-10 min-h-[280px] overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
-                                {/* Crystal from dilithiumcoin.com hero */}
-                                <div className="relative z-10 flex flex-col items-center">
-                                    <div className="w-36 h-52 relative group-hover:scale-110 transition-all duration-500 animate-float">
-                                        <svg width="200" height="280" viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full animate-pulse-glow">
-                                            <defs>
-                                                <linearGradient id="crystalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stopColor="#67e8f9" stopOpacity="1" />
-                                                    <stop offset="50%" stopColor="#22d3ee" stopOpacity="0.95" />
-                                                    <stop offset="100%" stopColor="#06b6d4" stopOpacity="1" />
-                                                </linearGradient>
-                                                <linearGradient id="crystalGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                                    <stop offset="0%" stopColor="#0891b2" stopOpacity="1" />
-                                                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.9" />
-                                                </linearGradient>
-                                                <linearGradient id="crystalGrad3" x1="50%" y1="0%" x2="50%" y2="100%">
-                                                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0.5" />
-                                                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="1" />
-                                                </linearGradient>
-                                                <filter id="crystalGlow">
-                                                    <feGaussianBlur stdDeviation="12" result="blur" />
-                                                    <feMerge>
-                                                        <feMergeNode in="blur" />
-                                                        <feMergeNode in="blur" />
-                                                        <feMergeNode in="SourceGraphic" />
-                                                    </feMerge>
-                                                </filter>
-                                                <filter id="innerGlow">
-                                                    <feGaussianBlur stdDeviation="6" result="blur" />
-                                                    <feMerge>
-                                                        <feMergeNode in="blur" />
-                                                        <feMergeNode in="SourceGraphic" />
-                                                    </feMerge>
-                                                </filter>
-                                            </defs>
-                                            {/* Outer glow */}
-                                            <ellipse cx="100" cy="140" rx="70" ry="90" fill="#22d3ee" opacity="0.2" filter="url(#crystalGlow)" />
-                                            {/* Main crystal body — top half */}
-                                            <polygon points="100,10 60,100 100,130 140,100" fill="url(#crystalGrad1)" stroke="#67e8f9" strokeWidth="1" strokeOpacity="0.8" />
-                                            {/* Main crystal body — bottom half */}
-                                            <polygon points="60,100 100,130 140,100 100,270" fill="url(#crystalGrad2)" stroke="#67e8f9" strokeWidth="1" strokeOpacity="0.8" />
-                                            {/* Left facet */}
-                                            <polygon points="100,10 60,100 100,130" fill="url(#crystalGrad3)" opacity="0.6" />
-                                            {/* Right facet highlight */}
-                                            <polygon points="100,10 140,100 100,130" fill="#67e8f9" opacity="0.3" />
-                                            {/* Center line */}
-                                            <line x1="100" y1="10" x2="100" y2="270" stroke="#67e8f9" strokeWidth="0.8" opacity="0.5" />
-                                            {/* Internal refraction lines */}
-                                            <line x1="75" y1="60" x2="125" y2="120" stroke="#22d3ee" strokeWidth="0.5" opacity="0.6" />
-                                            <line x1="125" y1="60" x2="75" y2="120" stroke="#22d3ee" strokeWidth="0.5" opacity="0.5" />
-                                            <line x1="80" y1="140" x2="120" y2="200" stroke="#22d3ee" strokeWidth="0.5" opacity="0.5" />
-                                            {/* Sparkle highlights */}
-                                            <circle cx="90" cy="50" r="3" fill="white" opacity="1" filter="url(#innerGlow)" />
-                                            <circle cx="110" cy="80" r="2.5" fill="white" opacity="0.9" filter="url(#innerGlow)" />
-                                            <circle cx="95" cy="110" r="2" fill="white" opacity="0.7" filter="url(#innerGlow)" />
-                                            <circle cx="105" cy="180" r="1.5" fill="#67e8f9" opacity="0.6" filter="url(#innerGlow)" />
-                                        </svg>
-                                    </div>
-                                    <span className="mt-2 text-xs font-mono text-cyan-400/60 uppercase tracking-[0.3em]">DLT</span>
-                                </div>
-                            </div>
-
-                            {/* Right - Info */}
-                            <div className="p-8 flex flex-col justify-center">
-                                <div className="flex items-center gap-3 mb-3">
-                                    <span className="text-xs text-cyan-400 uppercase tracking-wider font-medium">Cryptocurrency</span>
-                                    <span className="text-zinc-700">|</span>
-                                    <span className="text-xs text-zinc-500 uppercase tracking-wider">Go / Rust / CUDA</span>
-                                </div>
-                                <h3 className="text-2xl sm:text-3xl font-bold group-hover:text-cyan-400 transition-colors">
-                                    Dilithium
-                                </h3>
-                                <p className="text-zinc-400 text-sm mt-4 leading-relaxed">
-                                    A quantum-safe proof-of-work cryptocurrency built entirely from scratch in Go. Inspired by the crystalline power source from Star Trek, Dilithium uses CRYSTALS-Dilithium post-quantum signatures (NIST FIPS 204) to secure every transaction from block zero — no migration needed when quantum computers arrive.
-                                </p>
-                                <div className="flex flex-wrap gap-2 mt-5">
-                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">Quantum-Safe</span>
-                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">SHA-256 PoW</span>
-                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">25M Fixed Supply</span>
-                                    <span className="text-xs px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">GPU Mining</span>
-                                </div>
-                                <div className="flex items-center gap-2 mt-6 text-sm text-zinc-500 group-hover:text-cyan-400 transition-colors">
-                                    <span>Visit dilithiumcoin.com</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-                    {/* PFactor */}
-                    <a
-                        href="https://pfactor.app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-sky-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-sky-500/10 mt-6"
-                    >
-                        <div className="grid md:grid-cols-2 gap-0">
-                            {/* Left - Visual */}
-                            <div className="relative bg-gradient-to-br from-sky-950/50 via-zinc-900 to-blue-950/30 flex items-center justify-center p-10 min-h-[280px] overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/0 to-blue-500/0 group-hover:from-sky-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
-                                {/* Voice visualization from pfactor.app */}
-                                <div className="relative z-10 w-full max-w-xs">
-                                    <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-xl p-5 shadow-2xl">
-                                        {/* AI Examiner bubble */}
-                                        <div className="flex items-start gap-3">
-                                            <div className="flex-shrink-0">
-                                                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center">
-                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-[10px] text-sky-400 font-medium mb-1">AI Examiner</p>
-                                                <p className="text-xs text-white/90 leading-relaxed">&ldquo;Can you explain what a SIGMET is and how it would affect your flight planning?&rdquo;</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Microphone + waveform */}
-                                        <div className="mt-4 pt-4 border-t border-slate-700/50">
-                                            <div className="flex items-center gap-3">
-                                                <div className="relative flex-shrink-0">
-                                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
-                                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="absolute inset-0 rounded-full bg-emerald-400/30 animate-pulse" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-[10px] text-emerald-400 font-medium mb-1">Listening...</p>
-                                                    <div className="flex items-center gap-[2px]">
-                                                        {[30, 17, 20, 24, 22, 26, 14, 22, 28, 29, 26, 18, 24, 8, 20, 16, 28, 14, 22, 10].map((h, i) => (
-                                                            <div
-                                                                key={i}
-                                                                className="w-[3px] bg-emerald-400/60 rounded-full"
-                                                                style={{
-                                                                    height: `${h * 0.6}px`,
-                                                                    animation: `waveform 1s ease-in-out ${i * 0.05}s infinite alternate`,
-                                                                }}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Right - Info */}
-                            <div className="p-8 flex flex-col justify-center">
-                                <div className="flex items-center gap-3 mb-3">
-                                    <span className="text-xs text-sky-400 uppercase tracking-wider font-medium">iOS App</span>
-                                    <span className="text-zinc-700">|</span>
-                                    <span className="text-xs text-zinc-500 uppercase tracking-wider">AI / Aviation</span>
-                                </div>
-                                <h3 className="text-2xl sm:text-3xl font-bold group-hover:text-sky-400 transition-colors">
-                                    PFactor
-                                </h3>
-                                <p className="text-zinc-400 text-sm mt-4 leading-relaxed">
-                                    An AI-powered voice-based oral exam simulator for student pilots preparing for their private pilot checkride. PFactor uses real-time speech recognition and an adaptive AI examiner that mimics real checkride conditions — asking follow-up questions, identifying weak areas, and referencing FAR/AIM regulations on the fly. No typing, no multiple choice — just natural conversation aligned with FAA Airman Certification Standards.
-                                </p>
-                                <div className="flex flex-wrap gap-2 mt-5">
-                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">Voice AI</span>
-                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">FAA ACS Aligned</span>
-                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">Adaptive Learning</span>
-                                    <span className="text-xs px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400">iOS</span>
-                                </div>
-                                <div className="flex items-center gap-2 mt-6 text-sm text-zinc-500 group-hover:text-sky-400 transition-colors">
-                                    <span>Visit pfactor.app</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            {/* ===== WEB DEVELOPMENT PROJECTS ===== */}
-            <section className="py-28 relative">
-                {/* Background accent */}
-                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-glow" />
-                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
-
-                <div className="max-w-5xl mx-auto px-6 relative z-10">
-                    <div className="text-center mb-16">
-                        <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
-                            Client Work
-                        </span>
-                        <h2 className="text-4xl sm:text-5xl font-bold mt-4">
-                            Web Development
-                        </h2>
-                        <p className="text-zinc-400 mt-4 max-w-xl mx-auto">
-                            Real projects for real clients — delivered on time and on budget.
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {/* BMG Aviation */}
-                        <a
-                            href="https://bmg.dimario.dev"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 will-change-transform"
-                        >
-                            <div className="aspect-[2/1] relative">
-                                <img
-                                    src="/projects/bmg-aviation.webp"
-                                    alt="BMG Jet Center"
-                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
-                            </div>
-                            <div className="p-6">
-                                <span className="text-xs text-purple-400 uppercase tracking-wider font-medium">
-                                    Aviation / FBO
-                                </span>
-                                <h3 className="text-xl font-semibold mt-2 group-hover:text-purple-400 transition-colors">
-                                    BMG Jet Center
-                                </h3>
-                                <p className="text-zinc-400 text-sm mt-3 leading-relaxed">
-                                    Full website for a Fixed Base Operator at Monroe County Airport in Bloomington, Indiana. BMG Jet Center has over 70 years of aviation history, offering fuel services, hangar storage, flight training, charter flights, and full-service line operations for general aviation and corporate travelers.
-                                </p>
-                                <div className="flex items-center gap-2 mt-5 text-sm text-zinc-500 group-hover:text-purple-400 transition-colors">
-                                    <span>View Live Site</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-
-                        {/* Pocopson Veterinary Station */}
-                        <a
-                            href="https://pocopsonvetstation.dimario.dev"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10 will-change-transform"
-                        >
-                            <div className="aspect-[2/1] relative" style={{ backfaceVisibility: 'hidden' }}>
-                                <img
-                                    src="/projects/pocopson-vet.webp"
-                                    alt="Pocopson Veterinary Station"
-                                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
-                            </div>
-                            <div className="p-6">
-                                <span className="text-xs text-blue-400 uppercase tracking-wider font-medium">
-                                    Veterinary / Healthcare
-                                </span>
-                                <h3 className="text-xl font-semibold mt-2 group-hover:text-blue-400 transition-colors">
-                                    Pocopson Veterinary Station
-                                </h3>
-                                <p className="text-zinc-400 text-sm mt-3 leading-relaxed">
-                                    Modern, responsive website for an independent veterinary practice in West Chester, PA. Operating out of a beautifully preserved 1893 railroad station listed on the Chester County Register of Historic Places, they combine compassionate care with modern technology like CO2 surgical lasers and digital dental X-rays.
-                                </p>
-                                <div className="flex items-center gap-2 mt-5 text-sm text-zinc-500 group-hover:text-blue-400 transition-colors">
-                                    <span>View Live Site</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div className="text-center mt-14">
-                        <a
-                            href="#contact"
-                            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
-                        >
-                            Have a project in mind?
-                            <span className="text-white font-medium group-hover:text-blue-400 transition-colors">
-                                Let's talk
-                            </span>
-                            <svg
-                                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                        <div className="flex flex-wrap gap-4 pt-2">
+                            <a
+                                href="#work"
+                                className="group inline-flex items-center gap-2 bg-white text-black font-medium px-6 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:gap-3"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                />
-                            </svg>
-                        </a>
+                                See the work
+                                <ArrowIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </a>
+                            <a
+                                href={profile.resume}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 border border-zinc-700 text-white font-medium px-6 py-3 rounded-full hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300"
+                            >
+                                Download résumé
+                            </a>
+                            <a
+                                href={profile.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 border border-zinc-800 text-zinc-300 font-medium px-6 py-3 rounded-full hover:border-zinc-600 hover:text-white transition-all duration-300"
+                            >
+                                <svg
+                                    className="w-4 h-4"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.5 18.3 4.8 18.3 4.8c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
+                                </svg>
+                                GitHub
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </section>
 
-            {/* ===== CONTACT ===== */}
-            <section id="contact" className="py-28 relative">
-                {/* Background accents */}
-                <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-glow" />
+            {/* ===== WORK ===== */}
+            <section id="work" className="py-28 relative scroll-mt-16">
+                <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-glow" />
                 <div
-                    className="absolute top-1/4 right-0 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[80px] animate-pulse-glow"
+                    className="absolute bottom-1/4 right-0 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[80px] animate-pulse-glow"
                     style={{ animationDelay: "2s" }}
                 />
 
                 <div className="max-w-5xl mx-auto px-6 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12">
-                        {/* Left - Info */}
-                        <div>
-                            <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">
-                                Get in Touch
-                            </span>
-                            <h2 className="text-4xl sm:text-5xl font-bold mt-4 leading-tight">
-                                Let's build
-                                <br />
-                                <span className="gradient-text">
-                                    something great
-                                </span>
-                            </h2>
-                            <p className="text-zinc-400 mt-6 max-w-sm">
-                                No contact forms that go nowhere. No waiting
-                                weeks for a response. Just reach out and talk
-                                directly with the person who'll build your
-                                project.
-                            </p>
+                    <Reveal>
+                        <SectionHeading
+                            eyebrow="Selected Work"
+                            title="Things I've built"
+                            blurb="A post-quantum blockchain, an AI checkride examiner, and the middleware flying a drone. Each one was shipped, tested, or published, not a tutorial follow-along."
+                        />
+                    </Reveal>
 
-                            <a
-                                href="mailto:hello@dimario.dev"
-                                className="inline-flex items-center gap-4 mt-8 text-zinc-400 hover:text-white transition-colors group"
-                            >
-                                <span className="w-12 h-12 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-blue-500/50 group-hover:bg-blue-500/10 transition-all duration-300">
-                                    <svg
-                                        className="w-5 h-5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
+                    {/* Featured projects */}
+                    <div className="space-y-6">
+                        {featured.map((project, i) => {
+                            const a = accents[project.accent];
+                            return (
+                                <Reveal key={project.name} delay={i * 80}>
+                                    <article
+                                        className={`group relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 sm:p-9 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${a.border} ${a.shadow}`}
                                     >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                        />
-                                    </svg>
-                                </span>
-                                <span className="group-hover:text-blue-400 transition-colors">
-                                    hello@dimario.dev
-                                </span>
-                            </a>
+                                        <div className="flex flex-wrap items-center gap-3 mb-4">
+                                            <span
+                                                className={`text-xs font-mono ${a.text}`}
+                                            >
+                                                {project.kind}
+                                            </span>
+                                            <span className="text-zinc-700">
+                                                /
+                                            </span>
+                                            <span className="text-xs text-zinc-500 font-mono">
+                                                {project.year}
+                                            </span>
+                                        </div>
 
-                            <div className="flex gap-3 mt-8">
-                                {["GitHub", "LinkedIn", "Twitter"].map(
-                                    (social) => (
-                                        <a
-                                            key={social}
-                                            href="#"
-                                            className="w-11 h-11 border border-zinc-800 rounded-full flex items-center justify-center text-zinc-500 hover:text-white hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300"
+                                        <h3 className="text-2xl sm:text-3xl font-bold">
+                                            {project.name}
+                                        </h3>
+                                        <p className="text-zinc-400 mt-1">
+                                            {project.subtitle}
+                                        </p>
+
+                                        <p className="text-zinc-400 text-sm leading-relaxed mt-5 max-w-3xl">
+                                            {project.summary}
+                                        </p>
+
+                                        {project.highlights.length > 0 && (
+                                            <ul className="mt-6 space-y-2.5 max-w-3xl">
+                                                {project.highlights.map((h) => (
+                                                    <li
+                                                        key={h}
+                                                        className="flex gap-3 text-sm text-zinc-400"
+                                                    >
+                                                        <span
+                                                            className={`mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 ${a.dot}`}
+                                                        />
+                                                        <span className="leading-relaxed">
+                                                            {h}
+                                                        </span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+
+                                        <div className="flex flex-wrap gap-2 mt-6">
+                                            {project.stack.map((tech) => (
+                                                <span
+                                                    key={tech}
+                                                    className="text-[11px] px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-900/80 text-zinc-400"
+                                                >
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </div>
+
+                                        {project.links.length > 0 && (
+                                            <div className="flex flex-wrap gap-5 mt-7">
+                                                {project.links.map((link) => (
+                                                    <a
+                                                        key={link.href}
+                                                        href={link.href}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={`inline-flex items-center gap-1.5 text-sm font-medium text-zinc-300 ${a.linkHover} transition-colors`}
+                                                    >
+                                                        {link.label}
+                                                        <span className="text-xs">
+                                                            ↗
+                                                        </span>
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        <div
+                                            className={`absolute bottom-0 left-8 right-8 h-0.5 bg-gradient-to-r ${a.bar} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full`}
+                                        />
+                                    </article>
+                                </Reveal>
+                            );
+                        })}
+                    </div>
+
+                    {/* Remaining projects */}
+                    <Reveal>
+                        <h3 className="text-sm uppercase tracking-[0.2em] text-zinc-500 mt-16 mb-6">
+                            Also built
+                        </h3>
+                    </Reveal>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {rest.map((project, i) => {
+                            const a = accents[project.accent];
+                            const href = project.links[0]?.href;
+                            const Wrapper = href ? "a" : "div";
+                            return (
+                                <Reveal key={project.name} delay={i * 60}>
+                                    <Wrapper
+                                        {...(href
+                                            ? {
+                                                  href,
+                                                  target: "_blank",
+                                                  rel: "noopener noreferrer",
+                                              }
+                                            : {})}
+                                        className={`group relative flex flex-col h-full bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${a.border} ${a.shadow}`}
+                                    >
+                                        {project.image && (
+                                            <div className="aspect-[16/9] overflow-hidden border-b border-zinc-800 bg-zinc-950">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={project.image}
+                                                    alt={`${project.name} screenshot`}
+                                                    className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-500"
+                                                />
+                                            </div>
+                                        )}
+                                        <div className="p-6 flex flex-col flex-1">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span
+                                                    className={`text-xs font-mono ${a.text}`}
+                                                >
+                                                    {project.kind}
+                                                </span>
+                                                <span className="text-zinc-700">
+                                                    /
+                                                </span>
+                                                <span className="text-xs text-zinc-500 font-mono">
+                                                    {project.year}
+                                                </span>
+                                            </div>
+
+                                            <h4 className="text-lg font-semibold">
+                                                {project.name}
+                                            </h4>
+                                            <p className="text-xs text-zinc-500 mt-0.5">
+                                                {project.subtitle}
+                                            </p>
+                                            <p className="text-sm text-zinc-400 leading-relaxed mt-4">
+                                                {project.summary}
+                                            </p>
+
+                                            {project.highlights.length > 0 && (
+                                                <ul className="mt-4 space-y-2">
+                                                    {project.highlights.map(
+                                                        (h) => (
+                                                            <li
+                                                                key={h}
+                                                                className="flex gap-2.5 text-xs text-zinc-500"
+                                                            >
+                                                                <span
+                                                                    className={`mt-[6px] w-1 h-1 rounded-full shrink-0 ${a.dot}`}
+                                                                />
+                                                                <span className="leading-relaxed">
+                                                                    {h}
+                                                                </span>
+                                                            </li>
+                                                        ),
+                                                    )}
+                                                </ul>
+                                            )}
+
+                                            <div className="flex flex-wrap gap-2 mt-auto pt-5 border-t border-zinc-800/70">
+                                                {project.stack.map((tech) => (
+                                                    <span
+                                                        key={tech}
+                                                        className="text-[11px] px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-900/80 text-zinc-400"
+                                                    >
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+
+                                            {href && (
+                                                <span
+                                                    className={`inline-flex items-center gap-1.5 text-sm font-medium mt-5 text-zinc-300 ${a.groupLink} transition-colors`}
+                                                >
+                                                    {project.links[0].label}
+                                                    <span className="text-xs">
+                                                        ↗
+                                                    </span>
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div
+                                            className={`absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r ${a.bar} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full`}
+                                        />
+                                    </Wrapper>
+                                </Reveal>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== EXPERIENCE ===== */}
+            <section
+                id="experience"
+                className="py-28 relative scroll-mt-16 border-t border-white/5"
+            >
+                <div className="max-w-5xl mx-auto px-6 relative z-10">
+                    <Reveal>
+                        <SectionHeading
+                            eyebrow="Experience"
+                            title="Where I've worked"
+                        />
+                    </Reveal>
+
+                    <div className="relative">
+                        {/* Timeline rail */}
+                        <div className="absolute left-0 sm:left-[7.5rem] top-2 bottom-2 w-px bg-gradient-to-b from-blue-500/40 via-purple-500/25 to-transparent" />
+
+                        <div className="space-y-12">
+                            {experience.map((job, i) => (
+                                <Reveal key={job.company} delay={i * 100}>
+                                    <div className="relative pl-8 sm:pl-0 sm:grid sm:grid-cols-[7.5rem_1fr] sm:gap-10">
+                                        <div className="hidden sm:block text-right pr-10 pt-0.5">
+                                            <span className="text-xs font-mono text-zinc-500 leading-snug block">
+                                                {job.period}
+                                            </span>
+                                        </div>
+
+                                        {/* Node */}
+                                        <span className="absolute left-0 sm:left-[7.5rem] top-2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-blue-500 ring-4 ring-[#030303]" />
+
+                                        <div className="sm:pl-2">
+                                            <h3 className="text-xl font-semibold">
+                                                {job.role}
+                                            </h3>
+                                            <p className="text-blue-400 text-sm mt-1">
+                                                {job.company}
+                                            </p>
+                                            <p className="sm:hidden text-xs font-mono text-zinc-500 mt-1">
+                                                {job.period}
+                                            </p>
+
+                                            <ul className="mt-5 space-y-2.5">
+                                                {job.bullets.map((bullet) => (
+                                                    <li
+                                                        key={bullet}
+                                                        className="flex gap-3 text-sm text-zinc-400"
+                                                    >
+                                                        <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-zinc-600 shrink-0" />
+                                                        <span className="leading-relaxed">
+                                                            {bullet}
+                                                        </span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+
+                                            <div className="flex flex-wrap gap-2 mt-5">
+                                                {job.stack.map((tech) => (
+                                                    <span
+                                                        key={tech}
+                                                        className="text-[11px] px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-900/80 text-zinc-400"
+                                                    >
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Reveal>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== ABOUT: skills, publications, education ===== */}
+            <section
+                id="about"
+                className="py-28 relative scroll-mt-16 border-t border-white/5"
+            >
+                <div className="absolute top-1/3 right-0 w-[350px] h-[350px] bg-amber-500/8 rounded-full blur-[110px] animate-pulse-glow" />
+
+                <div className="max-w-5xl mx-auto px-6 relative z-10">
+                    <Reveal>
+                        <SectionHeading
+                            eyebrow="About"
+                            title="Background"
+                            blurb="Finishing a B.S. and M.S. in Computer Science at Embry-Riddle while running Division II cross-country. Two peer-reviewed publications, an FAA Part 107 certificate, and a habit of building the thing rather than reading about it."
+                        />
+                    </Reveal>
+
+                    {/* Skills */}
+                    <Reveal>
+                        <div className="grid sm:grid-cols-2 gap-6">
+                            {skills.map((group) => (
+                                <div
+                                    key={group.group}
+                                    className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-colors"
+                                >
+                                    <h3 className="text-sm font-semibold text-zinc-300 mb-4">
+                                        {group.group}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {group.items.map((item) => (
+                                            <span
+                                                key={item}
+                                                className="text-xs px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-950 text-zinc-400"
+                                            >
+                                                {item}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Reveal>
+
+                    {/* Publications */}
+                    <Reveal>
+                        <h3 className="text-sm uppercase tracking-[0.2em] text-zinc-500 mt-16 mb-6">
+                            Publications
+                        </h3>
+                        <div className="space-y-4">
+                            {publications.map((pub) => (
+                                <a
+                                    key={pub.href}
+                                    href={pub.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-amber-500/40 hover:-translate-y-0.5 transition-all duration-300"
+                                >
+                                    <p className="text-sm text-zinc-300 leading-relaxed group-hover:text-white transition-colors">
+                                        {pub.citation}
+                                    </p>
+                                    <p className="text-xs text-amber-400/80 mt-2 font-mono">
+                                        {pub.venue} ↗
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
+                    </Reveal>
+
+                    {/* Education + extras */}
+                    <Reveal>
+                        <div className="grid sm:grid-cols-2 gap-6 mt-16">
+                            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
+                                <h3 className="text-sm uppercase tracking-[0.2em] text-zinc-500 mb-5">
+                                    Education
+                                </h3>
+                                <div className="space-y-5">
+                                    {education.map((edu) => (
+                                        <div key={edu.degree}>
+                                            <p className="font-medium text-zinc-200">
+                                                {edu.degree}
+                                            </p>
+                                            <p className="text-sm text-zinc-500 mt-0.5">
+                                                {edu.school}
+                                            </p>
+                                            <p className="text-xs font-mono text-blue-400/80 mt-1">
+                                                {edu.period}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
+                                <h3 className="text-sm uppercase tracking-[0.2em] text-zinc-500 mb-5">
+                                    Beyond the keyboard
+                                </h3>
+                                <ul className="space-y-3">
+                                    {extras.map((item) => (
+                                        <li
+                                            key={item}
+                                            className="flex gap-3 text-sm text-zinc-400"
                                         >
-                                            {social === "GitHub" && (
-                                                <svg
-                                                    className="w-4 h-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        clipRule="evenodd"
-                                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                                    />
-                                                </svg>
-                                            )}
-                                            {social === "LinkedIn" && (
-                                                <svg
-                                                    className="w-4 h-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                                                </svg>
-                                            )}
-                                            {social === "Twitter" && (
-                                                <svg
-                                                    className="w-4 h-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                                </svg>
-                                            )}
-                                        </a>
-                                    ),
-                                )}
+                                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                                            <span className="leading-relaxed">
+                                                {item}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
+                    </Reveal>
+                </div>
+            </section>
 
-                        {/* Right - Form */}
-                        <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 sm:p-8 hover:border-zinc-700 transition-colors duration-300">
-                            {formStatus === "success" ? (
-                                <div className="text-center py-12">
-                                    <div className="w-16 h-16 mx-auto bg-green-500/20 border border-green-500/30 rounded-full flex items-center justify-center mb-4">
-                                        <svg
-                                            className="w-8 h-8 text-green-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M5 13l4 4L19 7"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-white mb-2">
-                                        Message Sent!
-                                    </h3>
-                                    <p className="text-zinc-400 mb-6">
-                                        Thanks for reaching out. We'll get back
-                                        to you soon.
-                                    </p>
-                                    <button
-                                        onClick={() => setFormStatus("idle")}
-                                        className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                                    >
-                                        Send another message
-                                    </button>
-                                </div>
-                            ) : (
-                                <form
-                                    onSubmit={handleSubmit}
-                                    className="space-y-5"
+            {/* ===== CONTACT ===== */}
+            <section
+                id="contact"
+                className="py-28 relative scroll-mt-16 border-t border-white/5"
+            >
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-glow" />
+
+                <div className="max-w-5xl mx-auto px-6 relative z-10">
+                    <Reveal>
+                        <SectionHeading
+                            eyebrow="Contact"
+                            title="Get in touch"
+                            blurb="Open to software engineering roles and internships in embedded, systems, or full-stack. The fastest way to reach me is email."
+                        />
+                    </Reveal>
+
+                    <div className="grid lg:grid-cols-[0.8fr_1fr] gap-10">
+                        {/* Direct channels */}
+                        <Reveal>
+                            <div className="space-y-4">
+                                <button
+                                    onClick={copyEmail}
+                                    className="group w-full text-left bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 hover:border-blue-500/40 transition-all duration-300"
                                 >
-                                    <div className="grid sm:grid-cols-2 gap-5">
-                                        <div>
-                                            <label className="block text-sm text-zinc-400 mb-2">
-                                                Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                value={formData.name}
-                                                onChange={handleFormChange}
-                                                required
-                                                className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300"
-                                                placeholder="Your name"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm text-zinc-400 mb-2">
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                value={formData.email}
-                                                onChange={handleFormChange}
-                                                required
-                                                className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300"
-                                                placeholder="your@email.com"
-                                            />
-                                        </div>
-                                    </div>
+                                    <p className="text-xs uppercase tracking-widest text-zinc-500">
+                                        Email
+                                    </p>
+                                    <p className="text-zinc-200 mt-1.5 group-hover:text-blue-400 transition-colors break-all">
+                                        {profile.email}
+                                    </p>
+                                    <p className="text-xs text-zinc-600 mt-2">
+                                        {copied
+                                            ? "Copied to clipboard"
+                                            : "Click to copy"}
+                                    </p>
+                                </button>
+
+                                <a
+                                    href={profile.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group block bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 hover:border-purple-500/40 transition-all duration-300"
+                                >
+                                    <p className="text-xs uppercase tracking-widest text-zinc-500">
+                                        GitHub
+                                    </p>
+                                    <p className="text-zinc-200 mt-1.5 group-hover:text-purple-400 transition-colors">
+                                        @luccadimario ↗
+                                    </p>
+                                </a>
+
+                                <a
+                                    href={profile.resume}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group block bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 hover:border-amber-500/40 transition-all duration-300"
+                                >
+                                    <p className="text-xs uppercase tracking-widest text-zinc-500">
+                                        Résumé
+                                    </p>
+                                    <p className="text-zinc-200 mt-1.5 group-hover:text-amber-400 transition-colors">
+                                        Download PDF ↗
+                                    </p>
+                                </a>
+                            </div>
+                        </Reveal>
+
+                        {/* Form */}
+                        <Reveal delay={100}>
+                            <form
+                                onSubmit={handleSubmit}
+                                className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-7 space-y-5"
+                            >
+                                <div className="grid sm:grid-cols-2 gap-5">
                                     <div>
-                                        <label className="block text-sm text-zinc-400 mb-2">
-                                            Project Type
-                                        </label>
-                                        <select
-                                            name="projectType"
-                                            value={formData.projectType}
-                                            onChange={handleFormChange}
-                                            className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors duration-300"
+                                        <label
+                                            htmlFor="name"
+                                            className="block text-xs uppercase tracking-widest text-zinc-500 mb-2"
                                         >
-                                            <option value="">
-                                                Select a service
-                                            </option>
-                                            <option value="web">
-                                                Web Development
-                                            </option>
-                                            <option value="app">
-                                                App Development
-                                            </option>
-                                            <option value="consultation">
-                                                Web Consultation
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm text-zinc-400 mb-2">
-                                            Message
+                                            Name
                                         </label>
-                                        <textarea
-                                            name="message"
-                                            value={formData.message}
-                                            onChange={handleFormChange}
+                                        <input
+                                            id="name"
+                                            name="name"
+                                            type="text"
                                             required
-                                            rows={4}
-                                            className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors duration-300 resize-none"
-                                            placeholder="Tell us about your project..."
+                                            value={formData.name}
+                                            onChange={handleFormChange}
+                                            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/60 transition-colors"
+                                            placeholder="Jane Recruiter"
                                         />
                                     </div>
-                                    {formStatus === "error" && (
-                                        <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">
-                                            {formError}
-                                        </div>
-                                    )}
-                                    <button
-                                        type="submit"
-                                        disabled={formStatus === "loading"}
-                                        className="w-full bg-white text-black font-medium py-3.5 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    <div>
+                                        <label
+                                            htmlFor="email"
+                                            className="block text-xs uppercase tracking-widest text-zinc-500 mb-2"
+                                        >
+                                            Email
+                                        </label>
+                                        <input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={handleFormChange}
+                                            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/60 transition-colors"
+                                            placeholder="you@company.com"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="projectType"
+                                        className="block text-xs uppercase tracking-widest text-zinc-500 mb-2"
                                     >
-                                        {formStatus === "loading"
-                                            ? "Sending..."
-                                            : "Send Message"}
-                                    </button>
-                                </form>
-                            )}
-                        </div>
+                                        Reason
+                                    </label>
+                                    <select
+                                        id="projectType"
+                                        name="projectType"
+                                        value={formData.projectType}
+                                        onChange={handleFormChange}
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500/60 transition-colors"
+                                    >
+                                        <option value="">Select one</option>
+                                        <option value="role">
+                                            Job or internship opportunity
+                                        </option>
+                                        <option value="freelance">
+                                            Freelance project
+                                        </option>
+                                        <option value="collab">
+                                            Research or collaboration
+                                        </option>
+                                        <option value="other">Something else</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="message"
+                                        className="block text-xs uppercase tracking-widest text-zinc-500 mb-2"
+                                    >
+                                        Message
+                                    </label>
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        required
+                                        rows={5}
+                                        value={formData.message}
+                                        onChange={handleFormChange}
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/60 transition-colors resize-none"
+                                        placeholder="What's on your mind?"
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={formStatus === "loading"}
+                                    className="group w-full inline-flex items-center justify-center gap-2 bg-white text-black font-medium px-6 py-3 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {formStatus === "loading"
+                                        ? "Sending…"
+                                        : "Send message"}
+                                    {formStatus !== "loading" && (
+                                        <ArrowIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                    )}
+                                </button>
+
+                                {formStatus === "success" && (
+                                    <p className="text-sm text-emerald-400 text-center">
+                                        Message sent. I&apos;ll get back to you
+                                        soon.
+                                    </p>
+                                )}
+                                {formStatus === "error" && (
+                                    <p className="text-sm text-red-400 text-center">
+                                        {formError}
+                                    </p>
+                                )}
+                            </form>
+                        </Reveal>
                     </div>
                 </div>
             </section>
 
             {/* ===== FOOTER ===== */}
-            <footer className="py-8 border-t border-zinc-900/50">
+            <footer className="border-t border-white/5 py-10 relative z-10">
                 <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-sm text-zinc-600">
-                        © 2026 DiMario Development. All rights reserved.
+                        © {new Date().getFullYear()} {profile.name}
                     </p>
-                    <a href="#" className="text-lg font-bold group">
-                        <span className="text-white group-hover:text-blue-400 transition-colors">
-                            DIMARIO
-                        </span>
-                        <span className="text-zinc-500">.DEV</span>
-                    </a>
+                    <p className="text-xs text-zinc-600 text-center sm:text-right">
+                        Also available for freelance web &amp; app work.{" "}
+                        <a
+                            href="#contact"
+                            className="text-zinc-400 hover:text-blue-400 transition-colors underline underline-offset-4 decoration-zinc-700"
+                        >
+                            Get in touch
+                        </a>
+                        .
+                    </p>
                 </div>
             </footer>
         </main>
