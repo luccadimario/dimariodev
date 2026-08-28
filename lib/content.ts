@@ -13,9 +13,40 @@ export const profile = {
     email: "luccadimario@gmail.com",
     phone: "(484) 467-2466",
     github: "https://github.com/luccadimario",
-    resume: "/carmen-lucca-dimario-resume.pdf",
     status: "M.S. Computer Science @ Embry-Riddle · Open to SWE roles",
 } as const;
+
+export interface Resume {
+    id: string;
+    label: string;
+    short: string;
+    blurb: string;
+    href: string;
+}
+
+export const resumes: Resume[] = [
+    {
+        id: "embedded",
+        label: "Embedded & Systems",
+        short: "Embedded",
+        blurb: "Firmware, compiler toolchains, and robotics autonomy.",
+        href: "/carmen-lucca-dimario-resume-embedded.pdf",
+    },
+    {
+        id: "software",
+        label: "Software Engineering",
+        short: "Software",
+        blurb: "Systems, distributed infrastructure, and applied ML.",
+        href: "/carmen-lucca-dimario-resume-software.pdf",
+    },
+    {
+        id: "fullstack",
+        label: "Full-Stack & Web",
+        short: "Full-Stack",
+        blurb: "Product engineering across React, Next.js, and PHP backends.",
+        href: "/carmen-lucca-dimario-resume-fullstack.pdf",
+    },
+];
 
 export type Accent = "blue" | "purple" | "amber" | "emerald";
 
@@ -92,13 +123,13 @@ export const projects: Project[] = [
         ],
     },
     {
-        name: "F1Tenth Autonomous Racing",
+        name: "RoboRacer",
         subtitle: "Software lead, competition autonomy stack",
         kind: "Robotics",
         accent: "emerald",
         year: "2025 — 2026",
         summary:
-            "Assembled and tuned the F1Tenth platform from bare components, mounting compute, sensors, and motor controller into a competition-ready vehicle, then installed and configured the full ROS2 stack on the onboard computer.",
+            "Assembled and tuned the RoboRacer platform from bare components, mounting compute, sensors, and motor controller into a competition-ready vehicle, then installed and configured the full ROS2 stack on the onboard computer.",
         highlights: [
             "Deployed an end-to-end autonomy stack from sensor input through planning to actuation",
             "Validated reliable performance under real competition conditions",
@@ -225,7 +256,7 @@ export const publications = [
 ];
 
 export const skills = [
-    { group: "Languages", items: ["C", "C++", "Swift", "GNU ASM", "TypeScript", "JavaScript", "Go", "Java", "Python", "SQL", "Bash"] },
+    { group: "Languages", items: ["C", "C++", "Swift", "GNU ASM", "Rust", "TypeScript", "JavaScript", "Go", "Java", "Python", "SQL", "Bash"] },
     { group: "Embedded & Robotics", items: ["ROS2", "PX4", "STM32", "Jetson Orin", "Clang", "ARMcc", "TensorRT", "UNIX"] },
     { group: "Web & Mobile", items: ["React", "Next.js", "SwiftUI", "Convex", "Symfony", "Laravel", "Tailwind"] },
     { group: "Practice", items: ["Agile", "Scrum", "Test infrastructure", "Technical writing"] },
@@ -245,6 +276,7 @@ export const education = [
 ];
 
 export const extras = [
+    "ERAU Cyber Rodeo 2026: first place, individual",
     "ERAU Division II Cross-Country / Track, roughly 30 hours of training weekly",
     "FAA Part 107 Remote Pilot Certification",
 ];

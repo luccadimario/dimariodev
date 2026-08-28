@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import {
     profile,
+    resumes,
     projects,
     experience,
     publications,
@@ -272,9 +273,7 @@ export default function Home() {
                             </a>
                         ))}
                         <a
-                            href={profile.resume}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href="#contact"
                             className="text-sm font-medium bg-white text-black px-5 py-2 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25"
                         >
                             Résumé
@@ -318,14 +317,17 @@ export default function Home() {
                                 {link.label}
                             </a>
                         ))}
-                        <a
-                            href={profile.resume}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                            Résumé ↗
-                        </a>
+                        {resumes.map((cv) => (
+                            <a
+                                key={cv.id}
+                                href={cv.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                                {cv.short} résumé ↗
+                            </a>
+                        ))}
                     </div>
                 )}
             </nav>
@@ -373,9 +375,7 @@ export default function Home() {
                                 <ArrowIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                             </a>
                             <a
-                                href={profile.resume}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href="#contact"
                                 className="inline-flex items-center gap-2 border border-zinc-700 text-white font-medium px-6 py-3 rounded-full hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300"
                             >
                                 Download résumé
@@ -861,19 +861,25 @@ export default function Home() {
                                     </p>
                                 </a>
 
-                                <a
-                                    href={profile.resume}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group block bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 hover:border-amber-500/40 transition-all duration-300"
-                                >
-                                    <p className="text-xs uppercase tracking-widest text-zinc-500">
-                                        Résumé
-                                    </p>
-                                    <p className="text-zinc-200 mt-1.5 group-hover:text-amber-400 transition-colors">
-                                        Download PDF ↗
-                                    </p>
-                                </a>
+                                {resumes.map((cv) => (
+                                    <a
+                                        key={cv.id}
+                                        href={cv.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group block bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 hover:border-amber-500/40 transition-all duration-300"
+                                    >
+                                        <p className="text-xs uppercase tracking-widest text-zinc-500">
+                                            Résumé · {cv.label}
+                                        </p>
+                                        <p className="text-zinc-200 mt-1.5 group-hover:text-amber-400 transition-colors">
+                                            Download PDF ↗
+                                        </p>
+                                        <p className="text-xs text-zinc-600 mt-2">
+                                            {cv.blurb}
+                                        </p>
+                                    </a>
+                                ))}
                             </div>
                         </Reveal>
 
