@@ -243,15 +243,21 @@ export const experience: Job[] = [
 export const publications = [
     {
         citation:
-            'DiMario, C., Bacha, R., & Butka, B. "Combatting Senior Scams Using a Large Language Model-Created Rubric."',
-        venue: "ASSE '24, ACM, 2024",
-        href: "https://doi.org/10.1145/3702138.3702140",
-    },
-    {
-        citation:
             'Malarchick, R., DiMario, C., et al. "Predictive Target Pursuit for Autonomous UAVs Using RF-DETR with Depth-Aware State Estimation and Physics-Informed Trajectory Prediction."',
         venue: "Proc. SPIE 14030, Machine Learning from Challenging Data 2026, 140300O",
         href: "https://doi.org/10.1117/12.3094732",
+    },
+    {
+        citation:
+            'Malarchick, R. et al. (incl. DiMario, C.) "Robust Real-Time UAV Target Tracking with Onboard Vision-Based Yaw Control."',
+        venue: "Beyond: Undergraduate Research Journal, Vol. 9, 2025 · Open access",
+        href: "https://commons.erau.edu/beyond/vol9/iss1/6",
+    },
+    {
+        citation:
+            'DiMario, C., Bacha, R., & Butka, B. "Combatting Senior Scams Using a Large Language Model-Created Rubric."',
+        venue: "ASSE '24, ACM, 2024",
+        href: "https://doi.org/10.1145/3702138.3702140",
     },
 ];
 
