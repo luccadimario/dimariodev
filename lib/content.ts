@@ -110,15 +110,15 @@ export const projects: Project[] = [
         year: "2024 — 2026",
         featured: true,
         summary:
-            "Built the middleware that turns a camera feed into flight commands. A modular three-node ROS2 pipeline converts YOLOv8 detections into yaw commands via pinhole camera intrinsics and publishes them to a PX4 flight controller over Micro XRCE-DDS. Work published in Beyond: Undergraduate Research Journal.",
+            "Built the middleware that turns a camera feed into flight commands. A modular four-node ROS2 pipeline converts RF-DETR detections into yaw commands via pinhole camera intrinsics and publishes them to a PX4 flight controller over Micro XRCE-DDS. Work published at SPIE Defense + Security 2026.",
         highlights: [
-            "Optimized YOLOv8 with NVIDIA TensorRT for real-time inference on a Jetson Orin",
-            "Validated the full software stack in a 600-second SITL test at 30 Hz throughput across every pipeline stage",
+            "Diagnosed DDS image-transport serialization as the pipeline bottleneck and replaced it with direct V4L2 capture, cutting mean detection latency from 234 ms to 58.8 ms and eliminating dropouts at 1280x720",
+            "Optimized RF-DETR with NVIDIA TensorRT FP16 for real-time inference at 15 FPS on a Jetson Orin",
             "Designed the detection-to-actuation contract so perception and control teams could iterate independently",
         ],
-        stack: ["C++", "ROS2", "YOLOv8", "TensorRT", "PX4", "Jetson Orin", "Micro XRCE-DDS"],
+        stack: ["C++", "Python", "ROS2", "RF-DETR", "TensorRT", "PX4", "Jetson Orin", "Micro XRCE-DDS"],
         links: [
-            { label: "Paper", href: "https://commons.erau.edu/beyond/vol9/iss1/6" },
+            { label: "Paper", href: "https://doi.org/10.1117/12.3094732" },
             { label: "Source", href: "https://github.com/luccadimario/AirHoundMiddleware" },
         ],
     },
@@ -221,9 +221,9 @@ export const experience: Job[] = [
         role: "RISE Intern / CO-OP Participant",
         period: "June 2025 — May 2026",
         bullets: [
-            "Integrated the PETSc linear algebra library into the Accuro application, reducing complex computation time",
+            "Upgraded the PETSc linear algebra library across a major version boundary to enable GPU acceleration, reducing complex computation time",
             "Analyzed an advanced C/C++ codebase to identify differences in Linear Energy Transfer (LET) calculations through various substrates",
-            "Redesigned and improved the testing framework for the entire Accuro software suite, increasing reliability",
+            "Rebuilt the Accuro test suite from hard-coded shell scripts into a Python framework with parallel execution and selectable test subsets, cutting a multi-hour run to roughly 25 minutes",
         ],
         stack: ["C", "C++", "PETSc", "Numerical methods", "Test infrastructure"],
     },
@@ -249,14 +249,14 @@ export const publications = [
     },
     {
         citation:
-            'Malarchick, R. et al. (incl. DiMario, C.) "Robust Real-Time UAV Target Tracking with Onboard Vision-Based Yaw Control."',
-        venue: "Beyond: Undergraduate Research Journal, Vol. 9, 2025",
-        href: "https://commons.erau.edu/beyond/vol9/iss1/6",
+            'Malarchick, R., DiMario, C., et al. "Predictive Target Pursuit for Autonomous UAVs Using RF-DETR with Depth-Aware State Estimation and Physics-Informed Trajectory Prediction."',
+        venue: "Proc. SPIE 14030, Machine Learning from Challenging Data 2026, 140300O",
+        href: "https://doi.org/10.1117/12.3094732",
     },
 ];
 
 export const skills = [
-    { group: "Languages", items: ["C", "C++", "Swift", "GNU ASM", "Rust", "TypeScript", "JavaScript", "Go", "Java", "Python", "SQL", "Bash"] },
+    { group: "Languages", items: ["C", "C++", "Swift", "GNU ASM", "TypeScript", "JavaScript", "Go", "Java", "Python", "SQL", "Bash"] },
     { group: "Embedded & Robotics", items: ["ROS2", "PX4", "STM32", "Jetson Orin", "Clang", "ARMcc", "TensorRT", "UNIX"] },
     { group: "Web & Mobile", items: ["React", "Next.js", "SwiftUI", "Convex", "Symfony", "Laravel", "Tailwind"] },
     { group: "Practice", items: ["Agile", "Scrum", "Test infrastructure", "Technical writing"] },
