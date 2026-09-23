@@ -135,7 +135,25 @@ export const projects: Project[] = [
             "Validated reliable performance under real competition conditions",
         ],
         stack: ["ROS2", "Python", "C++", "SLAM", "Embedded Linux"],
+        // Lab repo is private; uncomment once AkbasLab makes it public.
+        // links: [{ label: "Source", href: "https://github.com/AkbasLab/F1Tenth-SeniorDesign25-26" }],
         links: [],
+    },
+    {
+        name: "SEMBAS-RL",
+        subtitle: "Graduate research, autonomous driving policy assurance",
+        kind: "Research / Reinforcement Learning",
+        accent: "purple",
+        year: "2026 — present",
+        summary:
+            "Reinforcement learning policies fail in ways their training curves never show. SEMBAS-RL extends an adaptive boundary scanner to RL policy evaluation, mapping the 3D scenario space to find where a learned driving policy stops being reliable, then turning that geometry back into concrete retraining proposals.",
+        highlights: [
+            "Trained and evaluated thirteen driving policies across two algorithms (PPO, SAC) and five curriculum strategies over 5M+ training steps",
+            "Extended SEMBAS, a three-phase adaptive boundary scanner (Latin hypercube seeding, binary bisection, boundary walking), to RL policy evaluation, wired to the simulator as a socket service returning deterministic PASS/FAIL labels",
+            "Built three analysis agents (policy down-selection, failure-mechanism classification, boundary-aware retraining planning) that convert boundary geometry into ranked retraining proposals, closing the loop from evaluation back into training",
+        ],
+        stack: ["Python", "PyTorch", "Stable-Baselines3", "Gymnasium", "PPO / SAC", "CARLoS"],
+        links: [{ label: "Source", href: "https://github.com/AkbasLab/SEMBAS-RL" }],
     },
     {
         name: "SiT Trajectory Prediction",
