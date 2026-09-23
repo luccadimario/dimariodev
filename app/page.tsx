@@ -137,6 +137,25 @@ function ArrowIcon({ className = "" }: { className?: string }) {
     );
 }
 
+function ExternalIcon({ className = "" }: { className?: string }) {
+    return (
+        <svg
+            className={className}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 17L17 7m0 0H9m8 0v8"
+            />
+        </svg>
+    );
+}
+
 function SectionHeading({
     eyebrow,
     title,
@@ -325,7 +344,7 @@ export default function Home() {
                                 rel="noopener noreferrer"
                                 className="block text-blue-400 hover:text-blue-300 transition-colors"
                             >
-                                {cv.short} résumé ↗
+                                <span className="inline-flex items-center gap-1">{cv.short} résumé<ExternalIcon className="w-3 h-3" /></span>
                             </a>
                         ))}
                     </div>
@@ -492,9 +511,7 @@ export default function Home() {
                                                         className={`inline-flex items-center gap-1.5 text-sm font-medium text-zinc-300 ${a.linkHover} transition-colors`}
                                                     >
                                                         {link.label}
-                                                        <span className="text-xs">
-                                                            ↗
-                                                        </span>
+                                                        <ExternalIcon className="w-3.5 h-3.5" />
                                                     </a>
                                                 ))}
                                             </div>
@@ -604,9 +621,7 @@ export default function Home() {
                                                     className={`inline-flex items-center gap-1.5 text-sm font-medium mt-5 text-zinc-300 ${a.groupLink} transition-colors`}
                                                 >
                                                     {project.links[0].label}
-                                                    <span className="text-xs">
-                                                        ↗
-                                                    </span>
+                                                    <ExternalIcon className="w-3.5 h-3.5" />
                                                 </span>
                                             )}
                                         </div>
@@ -756,7 +771,7 @@ export default function Home() {
                                         {pub.citation}
                                     </p>
                                     <p className="text-xs text-amber-400/80 mt-2 font-mono">
-                                        {pub.venue} ↗
+                                        <span className="inline-flex items-center gap-1">{pub.venue}<ExternalIcon className="w-3 h-3" /></span>
                                     </p>
                                 </a>
                             ))}
@@ -857,7 +872,7 @@ export default function Home() {
                                         GitHub
                                     </p>
                                     <p className="text-zinc-200 mt-1.5 group-hover:text-purple-400 transition-colors">
-                                        @luccadimario ↗
+                                        <span className="inline-flex items-center gap-1.5">@luccadimario<ExternalIcon className="w-3.5 h-3.5" /></span>
                                     </p>
                                 </a>
 
@@ -873,7 +888,7 @@ export default function Home() {
                                             Résumé · {cv.label}
                                         </p>
                                         <p className="text-zinc-200 mt-1.5 group-hover:text-amber-400 transition-colors">
-                                            Download PDF ↗
+                                            <span className="inline-flex items-center gap-1.5">Download PDF<ExternalIcon className="w-3.5 h-3.5" /></span>
                                         </p>
                                         <p className="text-xs text-zinc-600 mt-2">
                                             {cv.blurb}
