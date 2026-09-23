@@ -124,17 +124,19 @@ export const projects: Project[] = [
     },
     {
         name: "RoboRacer",
-        subtitle: "Software lead, competition autonomy stack",
-        kind: "Robotics",
+        subtitle: "Software lead, F1Tenth competition autonomy stack",
+        kind: "Robotics / Embedded",
         accent: "emerald",
         year: "2025 — 2026",
         summary:
-            "Assembled and tuned the RoboRacer platform from bare components, mounting compute, sensors, and motor controller into a competition-ready vehicle, then installed and configured the full ROS2 stack on the onboard computer.",
+            "A 1/10-scale autonomous race car, built from bare components into a competition vehicle. I led the software: mounting the compute, sensors, and motor controller, bringing up the full ROS2 stack on the onboard computer, and taking the autonomy pipeline from sensor input through planning to actuation under real race conditions.",
         highlights: [
-            "Deployed an end-to-end autonomy stack from sensor input through planning to actuation",
-            "Validated reliable performance under real competition conditions",
+            "Brought up the onboard compute and sensor stack from scratch: LiDAR, IMU, and motor controller integrated over a single ROS2 graph on embedded Linux",
+            "Tuned the perception-to-actuation loop for the latency budget a racing line demands, where a late control command means a wall instead of an apex",
+            "Debugged across the hardware-software boundary, the same failure surface as AIRHOUND: when the car misbehaves, the cause is as often a sensor timing or wiring fault as it is the planner",
+            "Validated the end-to-end stack under real competition conditions, where recovery has to be automatic and there is no operator in the loop",
         ],
-        stack: ["ROS2", "Python", "C++", "SLAM", "Embedded Linux"],
+        stack: ["ROS2", "Python", "C++", "SLAM", "LiDAR", "Embedded Linux"],
         // Lab repo is private; uncomment once AkbasLab makes it public.
         // links: [{ label: "Source", href: "https://github.com/AkbasLab/F1Tenth-SeniorDesign25-26" }],
         links: [],
@@ -153,7 +155,7 @@ export const projects: Project[] = [
             "Built three analysis agents (policy down-selection, failure-mechanism classification, boundary-aware retraining planning) that convert boundary geometry into ranked retraining proposals, closing the loop from evaluation back into training",
         ],
         stack: ["Python", "PyTorch", "Stable-Baselines3", "Gymnasium", "PPO / SAC", "CARLoS"],
-        links: [{ label: "Source", href: "https://github.com/AkbasLab/SEMBAS-RL" }],
+        links: [{ label: "Source", href: "https://github.com/luccadimario/SEMBAS" }],
     },
     {
         name: "SiT Trajectory Prediction",
