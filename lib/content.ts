@@ -27,23 +27,23 @@ export interface Resume {
 export const resumes: Resume[] = [
     {
         id: "embedded",
-        label: "Embedded & Systems",
+        label: "Embedded & Firmware",
         short: "Embedded",
-        blurb: "Firmware, compiler toolchains, and robotics autonomy.",
+        blurb: "Firmware on ARM Cortex-M, compiler toolchains, and board-level bring-up.",
         href: "/carmen-lucca-dimario-resume-embedded.pdf",
     },
     {
         id: "software",
-        label: "Software Engineering",
-        short: "Software",
-        blurb: "Systems, distributed infrastructure, and applied ML.",
+        label: "Systems & Networking",
+        short: "Systems",
+        blurb: "Real-time systems, networking, and distributed infrastructure.",
         href: "/carmen-lucca-dimario-resume-software.pdf",
     },
     {
         id: "fullstack",
-        label: "Full-Stack & Web",
+        label: "Full-Stack & Applications",
         short: "Full-Stack",
-        blurb: "Product engineering across React, Next.js, and PHP backends.",
+        blurb: "Product engineering across iOS, React, Next.js, and PHP backends.",
         href: "/carmen-lucca-dimario-resume-fullstack.pdf",
     },
 ];
