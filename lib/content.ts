@@ -119,7 +119,8 @@ export const projects: Project[] = [
         stack: ["C++", "Python", "ROS2", "RF-DETR", "TensorRT", "PX4", "Jetson Orin", "Micro XRCE-DDS"],
         links: [
             { label: "Paper", href: "https://doi.org/10.1117/12.3094732" },
-            { label: "Source", href: "https://github.com/luccadimario/AirHoundMiddleware" },
+            { label: "Full system", href: "https://github.com/eppl-erau-db/AIRHOUND" },
+            { label: "My middleware", href: "https://github.com/luccadimario/AirHoundMiddleware" },
         ],
     },
     {
